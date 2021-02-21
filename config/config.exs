@@ -7,6 +7,20 @@
 # General application configuration
 use Mix.Config
 
+config :document_viewer,
+  buckets: [
+    %{
+      name: "mbta-scans-charlie-card-store",
+      excluded_files: [
+        "ACKAPP01-493399_TEST.txt",
+        "ACKAPP02-496832-TEST.txt",
+        "TEST - Copy.txt",
+        "TEST.txt"
+      ]
+    }
+  ],
+  live_catalog?: true
+
 # Configures the endpoint
 config :document_viewer, DocumentViewerWeb.Endpoint,
   url: [host: "localhost"],
