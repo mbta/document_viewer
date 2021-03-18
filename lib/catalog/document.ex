@@ -45,7 +45,7 @@ defmodule Catalog.Document do
       date_of_birth: parse_date(date_of_birth),
       scanned_date: parse_date(scanned_date),
       bucket_name: bucket_name,
-      path: path,
+      path: normalized(path),
       metadata_file: metadata_file
     }
   end
@@ -67,4 +67,10 @@ defmodule Catalog.Document do
 
     Date.new!(year, month, day)
   end
+
+  # File listings in the metadata files specify paths using the Windows
+  # backslash format, but S3 uses slashes. Convert backslashes to slashes to
+  # standardize on the S3 format.
+  @spec normalized(String.t()) :: String.t()
+  defp normalized(windows_path), do: String.replace(windows_path, "\\", "/")
 end

@@ -19,13 +19,13 @@ defmodule Catalog.DocumentTest do
                date_of_birth: ~D[1997-05-19],
                scanned_date: ~D[2021-02-22],
                bucket_name: @bucket_name,
-               path: "02-22-2021\\MADA01234_MADA01234\\987654.pdf",
+               path: "02-22-2021/MADA01234_MADA01234/987654.pdf",
                metadata_file: @metadata_file
              }
     end
 
     test "handles missing dates" do
-      metadata = "|MADA01234|MADA01234|DOE|JANE||02-22-2021\\MADA01234_MADA01234\\987654.pdf"
+      metadata = "|MADA01234|MADA01234|DOE|JANE||02-22-2021/MADA01234_MADA01234/987654.pdf"
 
       document = Document.from_metadata(metadata, @bucket_name, @metadata_file)
 
@@ -33,7 +33,7 @@ defmodule Catalog.DocumentTest do
                last_name: "Doe",
                first_name: "Jane",
                bucket_name: @bucket_name,
-               path: "02-22-2021\\MADA01234_MADA01234\\987654.pdf",
+               path: "02-22-2021/MADA01234_MADA01234/987654.pdf",
                metadata_file: @metadata_file
              }
     end
@@ -45,11 +45,11 @@ defmodule Catalog.DocumentTest do
         last_name: "Doe",
         first_name: "Jane",
         bucket_name: @bucket_name,
-        path: "02-22-2021\\MADA01234_MADA01234\\987654.pdf"
+        path: "02-22-2021/MADA01234_MADA01234/987654.pdf"
       }
 
       assert Document.key(document) ==
-               {"TEST_BUCKET", "02-22-2021\\MADA01234_MADA01234\\987654.pdf"}
+               {"TEST_BUCKET", "02-22-2021/MADA01234_MADA01234/987654.pdf"}
     end
   end
 end
