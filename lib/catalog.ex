@@ -40,7 +40,7 @@ defmodule Catalog do
   @impl GenServer
   @spec init(keyword()) :: {:ok, t(), {:continue, {:load_documents, keyword()}}}
   def init(opts) do
-    ets = :ets.new(__MODULE__, [:set, :protected, {:read_concurrency, true}])
+    ets = :ets.new(__MODULE__, [:set, :protected])
 
     {:ok, %__MODULE__{ets: ets, loaded?: false}, {:continue, {:load_documents, opts}}}
   end
