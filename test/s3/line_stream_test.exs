@@ -3,8 +3,6 @@ defmodule S3.LineStreamTest do
 
   alias S3.LineStream
 
-  doctest LineStream
-
   describe "lines/3" do
     test "returns content line-by-line" do
       stream = Stream.map(["abc\nde", "fg\nhij\n"], & &1)
