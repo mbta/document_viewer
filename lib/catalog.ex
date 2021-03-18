@@ -38,11 +38,14 @@ defmodule Catalog do
   # Server
 
   @impl GenServer
-  @spec init(keyword()) :: {:ok, t(), {:continue, {:load_documents, keyword()}}}
   def init(opts) do
-    ets = :ets.new(__MODULE__, [:set, :protected])
+    if Application.fetch_env!(:document_viewer, :live_catalog?) do
+      ets = :ets.new(__MODULE__, [:set, :protected])
 
-    {:ok, %__MODULE__{ets: ets, loaded?: false}, {:continue, {:load_documents, opts}}}
+      {:ok, %__MODULE__{ets: ets, loaded?: false}, {:continue, {:load_documents, opts}}}
+    else
+      :ignore
+    end
   end
 
   @impl GenServer

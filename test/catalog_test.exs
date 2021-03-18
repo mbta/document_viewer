@@ -1,5 +1,6 @@
 defmodule CatalogTest do
   use ExUnit.Case, async: true
+  import Test.Support.Helpers
 
   alias Catalog.Document
 
@@ -33,6 +34,10 @@ defmodule CatalogTest do
   }
 
   describe "init" do
+    setup do
+      reassign_env(:document_viewer, :live_catalog?, true)
+    end
+
     test "starts up the server" do
       opts = [
         documents_fn: fn -> [] end
@@ -44,6 +49,8 @@ defmodule CatalogTest do
 
   describe "lookup" do
     setup do
+      reassign_env(:document_viewer, :live_catalog?, true)
+
       opts = [
         documents_fn: fn ->
           [

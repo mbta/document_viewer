@@ -6,24 +6,17 @@ defmodule DocumentViewer.Application do
   use Application
 
   def start(_type, _args) do
-    children =
-      [
-        # Start the Telemetry supervisor
-        DocumentViewerWeb.Telemetry,
-        # Start the PubSub system
-        {Phoenix.PubSub, name: DocumentViewer.PubSub},
-        # Start the Endpoint (http/https)
-        DocumentViewerWeb.Endpoint
-        # Start a worker by calling: DocumentViewer.Worker.start_link(arg)
-        # {DocumentViewer.Worker, arg}
-      ] ++
-        if Application.fetch_env!(:document_viewer, :live_catalog?) do
-          [
-            {Catalog, name: Catalog}
-          ]
-        else
-          []
-        end
+    children = [
+      # Start the Telemetry supervisor
+      DocumentViewerWeb.Telemetry,
+      # Start the PubSub system
+      {Phoenix.PubSub, name: DocumentViewer.PubSub},
+      {Catalog, name: Catalog},
+      # Start the Endpoint (http/https)
+      DocumentViewerWeb.Endpoint
+      # Start a worker by calling: DocumentViewer.Worker.start_link(arg)
+      # {DocumentViewer.Worker, arg}
+    ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
