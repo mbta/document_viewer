@@ -48,7 +48,8 @@ defmodule Catalog.DocumentTest do
         path: "02-22-2021\\MADA01234_MADA01234\\987654.pdf"
       }
 
-      assert Document.key(document) == "TEST_BUCKET|02-22-2021\\MADA01234_MADA01234\\987654.pdf"
+      assert Document.key(document) ==
+               {"TEST_BUCKET", "02-22-2021\\MADA01234_MADA01234\\987654.pdf"}
     end
   end
 end

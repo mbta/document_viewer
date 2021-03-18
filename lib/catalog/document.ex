@@ -13,6 +13,8 @@ defmodule Catalog.Document do
           metadata_file: file_path()
         }
 
+  @type key :: {Bucket.name(), file_path()}
+
   @enforce_keys [
     :last_name,
     :first_name,
@@ -45,7 +47,8 @@ defmodule Catalog.Document do
     }
   end
 
-  def key(%__MODULE__{bucket_name: bucket_name, path: path}), do: "#{bucket_name}|#{path}"
+  @spec key(t()) :: key()
+  def key(%__MODULE__{bucket_name: bucket_name, path: path}), do: {bucket_name, path}
 
   # Parses a date string in the format: 01-20-2001
   @spec parse_date(String.t()) :: Date.t()
