@@ -70,10 +70,10 @@ defmodule Catalog do
       ) do
     results =
       ets
-      |> :ets.match_object(
-        {:_, search_term(last_name), search_term(first_name), search_term(date_of_birth), :_}
+      |> :ets.match(
+        {:_, search_term(last_name), search_term(first_name), search_term(date_of_birth), :"$1"}
       )
-      |> Enum.map(fn {_key, _last, _first, _dob, document} -> document end)
+      |> List.flatten()
 
     {:reply, results, state}
   end
