@@ -1,5 +1,5 @@
 defmodule S3.ObjectStreamTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias S3.ObjectStream
 

@@ -1,5 +1,5 @@
 defmodule Catalog.BucketTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Catalog.Bucket
 
