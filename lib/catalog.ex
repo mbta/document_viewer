@@ -109,7 +109,8 @@ defmodule Catalog do
   @spec parse_files(Bucket.name(), Document.file_path()) :: [Document.t()]
   defp parse_files(bucket_name, file_path) do
     bucket_name
-    |> S3.ObjectStream.lines(file_path)
+    |> S3.BinaryStream.binary_chunks(file_path)
+    |> S3.LineStream.lines()
     |> Stream.map(&Document.from_metadata(&1, bucket_name, file_path))
     |> Enum.to_list()
   end

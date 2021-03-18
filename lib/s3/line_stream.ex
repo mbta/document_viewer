@@ -1,4 +1,4 @@
-defmodule S3.ObjectStream do
+defmodule S3.LineStream do
   @moduledoc """
   Provide an S3 object as a line-by-line stream.
   """
@@ -7,22 +7,11 @@ defmodule S3.ObjectStream do
   Returns a stream of lines for a text file in an S3 bucket. Each element of
   the stream will be a single line instead of a binary chunk.
   """
-  @spec lines(binary(), binary(), ExAws.S3.download_file_opts()) :: Enumerable.t()
-  def lines(bucket, file, opts \\ []) do
-    bucket
-    |> binary_chunks(file, opts)
+  @spec lines(Enumerable.t()) :: Enumerable.t()
+  def lines(binary_stream) do
+    binary_stream
     |> Stream.chunk_while("", &split_chunk/2, &last_line/1)
     |> Stream.flat_map(& &1)
-  end
-
-  @spec binary_chunks(binary(), binary(), ExAws.S3.download_file_opts()) :: Enumerable.t()
-  defp binary_chunks(bucket, file, opts) do
-    download_file_fn = Keyword.get(opts, :download_file_fn, &ExAws.S3.download_file/4)
-    stream_fn = Keyword.get(opts, :stream_fn, &ExAws.stream!/1)
-
-    bucket
-    |> download_file_fn.(file, :memory, opts)
-    |> stream_fn.()
   end
 
   @spec split_chunk(String.t(), String.t()) ::
