@@ -93,9 +93,11 @@ defmodule Catalog do
   @type bucket_documents :: [{Bucket.name(), [Document.file_path()]}]
   @spec parse_metadata_files(bucket_documents()) :: [t()]
   defp parse_metadata_files(bucket_documents) do
-    Enum.flat_map(bucket_documents, fn {bucket_name, file_paths} ->
-      Enum.flat_map(file_paths, &parse_files(bucket_name, &1))
-    end)
+    for {bucket, file_paths} <- bucket_documents,
+        file_path <- file_paths,
+        file <- parse_files(bucket, file_path) do
+      file
+    end
   end
 
   @spec parse_files(Bucket.name(), Document.file_path()) :: [Document.t()]
