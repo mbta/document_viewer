@@ -81,7 +81,7 @@ defmodule Catalog do
   @spec all_documents() :: [t()]
   defp all_documents() do
     buckets()
-    |> Enum.map(&Bucket.metadata_files(&1))
+    |> Enum.map(&Bucket.metadata_files/1)
     |> parse_metadata_files()
   end
 
