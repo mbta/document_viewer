@@ -57,6 +57,6 @@ defmodule Catalog.Document do
     month = String.to_integer(month_str)
     day = String.to_integer(day_str)
 
-    Date.from_erl!({year, month, day})
+    Date.new!(year, month, day)
   end
 end
