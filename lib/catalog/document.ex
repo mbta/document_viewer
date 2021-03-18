@@ -1,4 +1,7 @@
 defmodule Catalog.Document do
+  @moduledoc """
+  Metadata representing a document (object) in an S3 bucket. The combination of bucket name and file path (represented by the key) provide a reference to the document.
+  """
   alias Catalog.Bucket
 
   @type file_path :: String.t()

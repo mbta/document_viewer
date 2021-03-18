@@ -1,4 +1,9 @@
 defmodule Catalog.Bucket do
+  @moduledoc """
+  Configuration representing an S3 bucket.
+
+  The excluded_files property is a list of a files we do not want to catalog for document listings.
+  """
   alias Catalog.Document
 
   @type name :: String.t()

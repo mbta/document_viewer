@@ -1,4 +1,7 @@
 defmodule Catalog do
+  @moduledoc """
+  A listing of all documents in our collection of buckets. The buckets are specified in the application configuration. Each document is associated with a person, and can be searched by that person's last name, first name, and/or date of birth.
+  """
   use GenServer
 
   alias Catalog.{Bucket, Document}
