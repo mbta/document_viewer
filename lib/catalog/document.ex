@@ -1,4 +1,6 @@
 defmodule Catalog.Document do
+  alias Catalog.Bucket
+
   @type file_path :: String.t()
 
   @type t :: %__MODULE__{
