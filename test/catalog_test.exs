@@ -95,6 +95,10 @@ defmodule CatalogTest do
              )
     end
 
+    test "returns an empty list if no documents match", %{pid: pid} do
+      assert equal_when_sorted(Catalog.lookup(pid, nil, "Don", nil), [])
+    end
+
     test "returns an error if every search argument is nil", %{pid: pid} do
       assert {:error, _message} = Catalog.lookup(pid, nil, nil, nil)
     end
