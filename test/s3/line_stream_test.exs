@@ -47,5 +47,38 @@ defmodule S3.LineStreamTest do
 
       assert list == ["abc", "def", "ghi", "jk", "lm", "no"]
     end
+
+    test "handles a chunk which ends with a newline" do
+      stream = Stream.map(["abc\n", "def\nghi\n"], & &1)
+
+      list =
+        stream
+        |> LineStream.lines()
+        |> Enum.to_list()
+
+      assert list == ["abc", "def", "ghi"]
+    end
+
+    test "handles a final chunk with just a newline" do
+      stream = Stream.map(["abc\r\nde", "fg\r\nhij\r\n", "\r\n"], & &1)
+
+      list =
+        stream
+        |> LineStream.lines()
+        |> Enum.to_list()
+
+      assert list == ["abc", "defg", "hij"]
+    end
+
+    test "handles a chunk with no newlines" do
+      stream = Stream.map(["a", "b", "c\ndef\n"], & &1)
+
+      list =
+        stream
+        |> LineStream.lines()
+        |> Enum.to_list()
+
+      assert list == ["abc", "def"]
+    end
   end
 end

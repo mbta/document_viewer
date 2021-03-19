@@ -26,7 +26,9 @@ defmodule S3.LineStream do
 
   @spec handle_chunks([String.t()], String.t()) ::
           {:cont, [String.t()], String.t()} | {:cont, String.t()}
-  defp handle_chunks([line_chunk], line_acc), do: {:cont, [line_acc <> line_chunk]}
+  defp handle_chunks([line_chunk], ""), do: {:cont, line_chunk}
+
+  defp handle_chunks([line_chunk], line_acc), do: {:cont, line_acc <> line_chunk}
 
   defp handle_chunks([end_of_line, start_of_next_line, ""], line_acc),
     do: {:cont, [line_acc <> end_of_line], start_of_next_line}
