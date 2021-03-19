@@ -40,7 +40,7 @@ defmodule Catalog.DocumentTest do
   end
 
   describe "key" do
-    test "returns a unique key for the document" do
+    test "includes both the bucket name and path that are needed to access the document" do
       document = %Document{
         last_name: "Doe",
         first_name: "Jane",
@@ -50,6 +50,24 @@ defmodule Catalog.DocumentTest do
 
       assert Document.key(document) ==
                {"TEST_BUCKET", "02-22-2021/MADA01234_MADA01234/987654.pdf"}
+    end
+
+    test "is unique for each document" do
+      document1 = %Document{
+        last_name: "Doe",
+        first_name: "Jane",
+        bucket_name: @bucket_name,
+        path: "doc1.pdf"
+      }
+
+      document2 = %Document{
+        last_name: "Doe",
+        first_name: "Jane",
+        bucket_name: @bucket_name,
+        path: "doc2.pdf"
+      }
+
+      refute Document.key(document1) == Document.key(document2)
     end
   end
 end
