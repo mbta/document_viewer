@@ -38,6 +38,7 @@ defmodule Catalog.Health do
   def handle_cast(:loaded, _state), do: {:noreply, :ready}
 
   @impl true
-  def handle_call(:ready?, _from, :not_ready = state), do: {:reply, false, state}
-  def handle_call(:ready?, _from, :ready = state), do: {:reply, true, state}
+  def handle_call(:ready?, _from, state) do
+    {:reply, state == :ready, state}
+  end
 end
