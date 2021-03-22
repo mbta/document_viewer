@@ -8,8 +8,8 @@ defmodule Catalog.Supervisor do
   @impl true
   def init(:ok) do
     children = [
-      Catalog,
-      Catalog.Health
+      Catalog.Health,
+      Catalog
     ]
 
     Supervisor.init(children, strategy: :one_for_all)
