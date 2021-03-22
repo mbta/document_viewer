@@ -2,25 +2,26 @@ defmodule DocumentViewerWeb.Router do
   use DocumentViewerWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_flash)
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", DocumentViewerWeb do
-    get "/_health", HealthController, :index
+    get("/_health", HealthController, :index)
   end
 
   scope "/", DocumentViewerWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", PageController, :index
+    get("/", QueryController, :new)
+    post("/", QueryController, :search)
   end
 
   # Other scopes may use custom stacks.
@@ -39,8 +40,8 @@ defmodule DocumentViewerWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through :browser
-      live_dashboard "/dashboard", metrics: DocumentViewerWeb.Telemetry
+      pipe_through(:browser)
+      live_dashboard("/dashboard", metrics: DocumentViewerWeb.Telemetry)
     end
   end
 end

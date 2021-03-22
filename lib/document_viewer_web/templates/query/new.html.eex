@@ -1,0 +1,29 @@
+<section class="row">
+  <div class="column">
+    <h2>Find Documents</h2>
+
+    <%= if @changeset.action do %>
+      <div class="alert alert-danger">
+        <p>
+          There was a problem with your search. Please check the errors below.
+        </p>
+      </div>
+    <% end %>
+
+    <%= form_for @changeset, Routes.query_path(@conn, :search), fn f -> %>
+      <%= label f, :last_name, "Last Name" %>
+      <%= text_input f, :last_name, autofocus: true %>
+      <%= error_tag f, :last_name %>
+
+      <%= label f, :first_name, "First Name" %>
+      <%= text_input f, :first_name %>
+      <%= error_tag f, :first_name %>
+
+      <%= label f, :date_of_birth_string, "Date of Birth" %>
+      <%= text_input f, :date_of_birth_string %>
+      <%= error_tag f, :date_of_birth_string %>
+
+      <%= submit "Search" %>
+    <% end %>
+  </div>
+</section>

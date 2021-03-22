@@ -34,3 +34,14 @@
   display: block;
   margin: -1rem 0 2rem;
 }
+
+/* Document search results */
+ul.documents {
+  list-style-type: none;
+}
+
+.document {
+  .first-name {
+    margin-right: 0.5rem;
+  }
+}
