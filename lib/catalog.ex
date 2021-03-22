@@ -7,14 +7,12 @@ defmodule Catalog do
   alias Catalog.{Bucket, Document}
 
   @type t :: %__MODULE__{
-          ets: :ets.tid(),
-          loaded?: boolean()
+          ets: :ets.tid()
         }
 
-  @enforce_keys [:ets, :loaded?]
+  @enforce_keys [:ets]
 
-  defstruct ets: nil,
-            loaded?: false
+  defstruct ets: nil
 
   # Client
 
@@ -45,7 +43,7 @@ defmodule Catalog do
     if Application.fetch_env!(:document_viewer, :live_catalog?) do
       ets = :ets.new(__MODULE__, [:set, :protected])
 
-      {:ok, %__MODULE__{ets: ets, loaded?: false}, {:continue, {:load_documents, opts}}}
+      {:ok, %__MODULE__{ets: ets}, {:continue, {:load_documents, opts}}}
     else
       :ignore
     end
@@ -53,7 +51,7 @@ defmodule Catalog do
 
   @impl GenServer
   @spec handle_continue({:load_documents, keyword()}, t()) :: {:noreply, t()}
-  def handle_continue({:load_documents, opts}, %__MODULE__{ets: ets, loaded?: false} = state) do
+  def handle_continue({:load_documents, opts}, %__MODULE__{ets: ets} = state) do
     documents_fn = Keyword.get(opts, :documents_fn, &all_documents/0)
 
     for document <- documents_fn.() do
@@ -65,7 +63,10 @@ defmodule Catalog do
         )
     end
 
-    {:noreply, %__MODULE__{state | loaded?: true}}
+    # Let the health server know that the data has finished loading
+    Catalog.Health.loaded()
+
+    {:noreply, state}
   end
 
   @impl GenServer

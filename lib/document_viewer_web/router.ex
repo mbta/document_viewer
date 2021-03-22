@@ -14,6 +14,10 @@ defmodule DocumentViewerWeb.Router do
   end
 
   scope "/", DocumentViewerWeb do
+    get "/_health", HealthController, :index
+  end
+
+  scope "/", DocumentViewerWeb do
     pipe_through :browser
 
     get "/", PageController, :index
