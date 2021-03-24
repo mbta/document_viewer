@@ -46,6 +46,7 @@ defmodule DocumentViewer.MixProject do
       {:hackney, "~> 1.17"},
       {:sweet_xml, "~> 0.6.6"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false}
     ]
   end
