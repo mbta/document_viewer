@@ -86,14 +86,14 @@ defmodule Catalog do
   end
 
   @spec all_documents() :: [t()]
-  defp all_documents() do
+  defp all_documents do
     buckets()
     |> Enum.map(&Bucket.metadata_files/1)
     |> parse_metadata_files()
   end
 
   @spec buckets() :: [Bucket.t()]
-  defp buckets() do
+  defp buckets do
     Application.fetch_env!(:document_viewer, :buckets)
   end
 
