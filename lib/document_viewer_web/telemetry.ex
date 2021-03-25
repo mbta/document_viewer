@@ -1,4 +1,8 @@
 defmodule DocumentViewerWeb.Telemetry do
+  @moduledoc """
+  Supervisor for Telemetry: a dynamic dispatching library for metrics and instrumentations.
+  """
+
   use Supervisor
   import Telemetry.Metrics
 

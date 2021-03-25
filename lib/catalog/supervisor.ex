@@ -1,4 +1,8 @@
 defmodule Catalog.Supervisor do
+  @moduledoc """
+  Supervisor for the Catalog GenServer and corresponding Health GenServer.
+  """
+
   use Supervisor
 
   def start_link([]) do
