@@ -2,7 +2,7 @@ defmodule CatalogTest do
   use ExUnit.Case, async: true
   import Test.Support.Helpers
 
-  alias Catalog.{Document, Query}
+  alias Catalog.Document
 
   @document_jane_doe_1950 %Document{
     last_name: "Doe",
@@ -69,38 +69,38 @@ defmodule CatalogTest do
 
     test "looks up documents by last name", %{pid: pid} do
       assert equal_when_sorted(
-               Catalog.lookup(pid, %Query{last_name: "Doe"}),
+               Catalog.lookup(pid, "Doe", nil, nil),
                [@document_jane_doe_1950, @document_jane_doe_2000, @document_john_doe]
              )
     end
 
     test "looks up documents by first name", %{pid: pid} do
       assert equal_when_sorted(
-               Catalog.lookup(pid, %Query{first_name: "Jane"}),
+               Catalog.lookup(pid, nil, "Jane", nil),
                [@document_jane_doe_1950, @document_jane_doe_2000]
              )
     end
 
     test "looks up documents by date of birth", %{pid: pid} do
       assert equal_when_sorted(
-               Catalog.lookup(pid, %Query{date_of_birth: ~D[1950-01-01]}),
+               Catalog.lookup(pid, nil, nil, ~D[1950-01-01]),
                [@document_jane_doe_1950, @document_mickey_mouse_1950]
              )
     end
 
     test "looks up documents by multiple fields", %{pid: pid} do
       assert equal_when_sorted(
-               Catalog.lookup(pid, %Query{first_name: "Jane", date_of_birth: ~D[1950-01-01]}),
+               Catalog.lookup(pid, nil, "Jane", ~D[1950-01-01]),
                [@document_jane_doe_1950]
              )
     end
 
     test "returns an empty list if no documents match", %{pid: pid} do
-      assert equal_when_sorted(Catalog.lookup(pid, %Query{first_name: "Don"}), [])
+      assert equal_when_sorted(Catalog.lookup(pid, nil, "Don", nil), [])
     end
 
     test "returns an error if every search argument is nil", %{pid: pid} do
-      assert {:error, _message} = Catalog.lookup(pid, %Query{})
+      assert {:error, _message} = Catalog.lookup(pid, nil, nil, nil)
     end
   end
 

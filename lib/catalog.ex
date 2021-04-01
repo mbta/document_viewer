@@ -4,7 +4,7 @@ defmodule Catalog do
   """
   use GenServer
 
-  alias Catalog.{Bucket, Document, Query}
+  alias Catalog.{Bucket, Document}
 
   @type t :: %__MODULE__{
           ets: :ets.tid()
@@ -23,19 +23,16 @@ defmodule Catalog do
     GenServer.start_link(__MODULE__, opts, name: name)
   end
 
-  @spec lookup(Query.t()) :: {:ok, [Document.t()]} | {:error, String.t()}
-  @spec lookup(GenServer.server(), Query.t()) :: {:ok, [Document.t()]} | {:error, String.t()}
-  def lookup(pid \\ __MODULE__, query)
+  @spec lookup(String.t() | nil, String.t() | nil, Date.t() | nil) ::
+          {:ok, [Document.t()]} | {:error, String.t()}
+  @spec lookup(GenServer.server(), String.t() | nil, String.t() | nil, Date.t() | nil) ::
+          {:ok, [Document.t()]} | {:error, String.t()}
+  def lookup(pid \\ __MODULE__, last_name, first_name, date_of_birth)
 
-  def lookup(_, %Query{last_name: nil, first_name: nil, date_of_birth: nil}) do
-    {:error, "Bad request. You must include at least one field to search on."}
-  end
+  def lookup(_, nil, nil, nil),
+    do: {:error, "Bad request. You must include at least one field to search on."}
 
-  def lookup(pid, %Query{
-        last_name: last_name,
-        first_name: first_name,
-        date_of_birth: date_of_birth
-      }) do
+  def lookup(pid, last_name, first_name, date_of_birth) do
     GenServer.call(pid, {:lookup, last_name, first_name, date_of_birth})
   end
 

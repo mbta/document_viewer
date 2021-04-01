@@ -10,7 +10,7 @@ defmodule DocumentViewerWeb.QueryControllerTest do
 
   describe "POST /" do
     test "performs a search and displays the results", %{conn: conn} do
-      lookup_fn = fn _ -> [] end
+      lookup_fn = fn _, _, _ -> [] end
 
       conn =
         conn

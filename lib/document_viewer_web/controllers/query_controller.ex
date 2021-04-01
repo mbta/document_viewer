@@ -1,7 +1,7 @@
 defmodule DocumentViewerWeb.QueryController do
   use DocumentViewerWeb, :controller
 
-  alias Catalog.Query
+  alias DocumentViewerWeb.Query
   alias Ecto.Changeset
 
   def new(conn, _params) do
@@ -9,11 +9,11 @@ defmodule DocumentViewerWeb.QueryController do
   end
 
   def search(conn, %{"query" => query_params}) do
-    lookup_fn = Map.get(conn.assigns, :lookup_fn, &Catalog.lookup/1)
+    lookup_fn = Map.get(conn.assigns, :lookup_fn, &Catalog.lookup/3)
 
     case apply_changes(query_params) do
       {:ok, query} ->
-        results = lookup_fn.(query)
+        results = lookup_fn.(query.last_name, query.first_name, query.date_of_birth)
 
         conn
         |> assign(:results, results)

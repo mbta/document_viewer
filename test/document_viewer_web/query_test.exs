@@ -1,7 +1,7 @@
-defmodule Catalog.QueryTest do
+defmodule DocumentViewerWeb.QueryTest do
   use ExUnit.Case, async: true
 
-  alias Catalog.Query
+  alias DocumentViewerWeb.Query
   alias Ecto.Changeset
 
   describe "new" do

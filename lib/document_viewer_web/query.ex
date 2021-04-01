@@ -1,4 +1,4 @@
-defmodule Catalog.Query do
+defmodule DocumentViewerWeb.Query do
   @moduledoc """
   Schema for validating document search queries.
   """
