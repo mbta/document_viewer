@@ -37,6 +37,23 @@ defmodule Catalog.DocumentTest do
                metadata_file: @metadata_file
              }
     end
+
+    test "capitalizes the last and first names" do
+      metadata =
+        "02-22-2021|MADA01234|MADA01234|DOE|jane|05-19-1997|02-22-2021\\MADA01234_MADA01234\\987654.pdf"
+
+      document = Document.from_metadata(metadata, @bucket_name, @metadata_file)
+
+      assert document == %Document{
+               last_name: "Doe",
+               first_name: "Jane",
+               date_of_birth: ~D[1997-05-19],
+               scanned_date: ~D[2021-02-22],
+               bucket_name: @bucket_name,
+               path: "02-22-2021/MADA01234_MADA01234/987654.pdf",
+               metadata_file: @metadata_file
+             }
+    end
   end
 
   describe "key" do
