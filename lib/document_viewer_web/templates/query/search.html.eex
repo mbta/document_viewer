@@ -6,11 +6,13 @@
       <%= unless Enum.empty?(@results) do %>
         <ul class="documents">
           <%= for document <- @results do %>
-            <li class="document">
-              <span class="last-name"><%= document.last_name %></span>,
-              <span class="first-name"><%= document.first_name %></span>
-              (<span class="date-of-birth"><%= format_date(document.date_of_birth) %></span>)
-            </li>
+            <%= link to: document_show_path(@conn, document) do %>
+              <li class="document">
+                <span class="last-name"><%= document.last_name %></span>,
+                <span class="first-name"><%= document.first_name %></span>
+                (<span class="date-of-birth"><%= format_date(document.date_of_birth) %></span>)
+              </li>
+            <% end %>
           <% end %>
         </ul>
       <% else %>

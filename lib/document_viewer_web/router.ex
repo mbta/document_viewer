@@ -22,6 +22,7 @@ defmodule DocumentViewerWeb.Router do
 
     get("/", QueryController, :new)
     post("/", QueryController, :search)
+    get("/documents/:bucket_name/:file_path", DocumentController, :show)
   end
 
   # Other scopes may use custom stacks.
