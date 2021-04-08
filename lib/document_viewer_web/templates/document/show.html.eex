@@ -1,0 +1,11 @@
+<section class="row">
+  <div class="column">
+    <h2 class="file-path"><%= @file_path %></h2>
+
+    <iframe class="pdf" src="<%= Routes.document_path(@conn, :pdf, @bucket_name, @file_path) %>"></iframe>
+
+    <div>
+      <%= link "Download", to: Routes.document_path(@conn, :pdf, @bucket_name, @file_path, download: true), class: "button" %>
+    </div>
+  </div>
+</section>

@@ -3,6 +3,8 @@ defmodule Catalog.DocumentTest do
 
   alias Catalog.Document
 
+  doctest Catalog.Document
+
   @bucket_name "TEST_BUCKET"
   @metadata_file "TEST_METADATA_FILE_PATH"
 
