@@ -31,7 +31,36 @@ defmodule DocumentViewerWeb.ConnCase do
     end
   end
 
-  setup _tags do
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+  setup tags do
+    {conn, user} =
+      cond do
+        tags[:authenticated] ->
+          user = "test_user"
+          document_viewer_group = Application.get_env(:document_viewer, :cognito_group)
+
+          conn =
+            Phoenix.ConnTest.build_conn()
+            |> Plug.Test.init_test_session(%{})
+            |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{
+              groups: [document_viewer_group]
+            })
+
+          {conn, user}
+
+        tags[:authenticated_not_in_group] ->
+          user = "test_user"
+
+          conn =
+            Phoenix.ConnTest.build_conn()
+            |> Plug.Test.init_test_session(%{})
+            |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{groups: []})
+
+          {conn, user}
+
+        true ->
+          {Phoenix.ConnTest.build_conn(), nil}
+      end
+
+    {:ok, %{conn: conn, user: user}}
   end
 end
