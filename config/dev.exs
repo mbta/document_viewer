@@ -56,6 +56,13 @@ config :document_viewer, DocumentViewerWeb.Endpoint,
     ]
   ]
 
+config :document_viewer, DocumentViewerWeb.AuthManager, secret_key: "dev key"
+
+config :ueberauth, Ueberauth,
+  providers: [
+    cognito: {DocumentViewerWeb.Ueberauth.Strategy.Fake, []}
+  ]
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
