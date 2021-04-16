@@ -19,7 +19,8 @@ config :document_viewer,
       ]
     }
   ],
-  live_catalog?: true
+  live_catalog?: true,
+  cognito_group: "document-viewer"
 
 # Configures the endpoint
 config :document_viewer, DocumentViewerWeb.Endpoint,
@@ -29,6 +30,10 @@ config :document_viewer, DocumentViewerWeb.Endpoint,
   pubsub_server: DocumentViewer.PubSub,
   live_view: [signing_salt: "7iBmI3k6"]
 
+config :document_viewer, DocumentViewerWeb.AuthManager,
+  issuer: "document_viewer",
+  secret_key: nil
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
@@ -36,6 +41,12 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+# Placeholder for Cognito authentication, defined for real in environment configs
+config :ueberauth, Ueberauth,
+  providers: [
+    cognito: {DocumentViewerWeb.Ueberauth.Strategy.Fake, []}
+  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
