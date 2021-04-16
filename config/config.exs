@@ -45,7 +45,7 @@ config :phoenix, :json_library, Jason
 # Placeholder for Cognito authentication, defined for real in environment configs
 config :ueberauth, Ueberauth,
   providers: [
-    cognito: nil
+    cognito: {DocumentViewerWeb.Ueberauth.Strategy.Fake, []}
   ]
 
 # Import environment specific config. This must remain at the bottom
