@@ -7,10 +7,15 @@ defmodule DocumentViewerWeb.EnsureDocumentViewerGroup do
 
   def init(options), do: options
 
-  def call(conn, _opts) do
+  def call(conn, opts) do
     with %{"groups" => groups} <- Guardian.Plug.current_claims(conn),
          true <- is_list(groups),
-         document_viewer_group <- Application.get_env(:document_viewer, :cognito_group),
+         document_viewer_group <-
+           Keyword.get(
+             opts,
+             :document_viewer_group,
+             Application.get_env(:document_viewer, :cognito_group)
+           ),
          true <- document_viewer_group in groups do
       conn
     else
