@@ -48,5 +48,5 @@ defmodule DocumentViewerWeb.AuthController do
   defp log_errors(%Ueberauth.Failure{errors: errors}), do: Enum.map(errors, &log_error/1)
 
   defp log_error(%Ueberauth.Failure.Error{message: message}),
-    do: Logger.error("Ueberauth erorr: #{message}")
+    do: Logger.error("Ueberauth error: #{message}")
 end

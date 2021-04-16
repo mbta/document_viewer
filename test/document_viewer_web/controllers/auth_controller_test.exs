@@ -54,7 +54,7 @@ defmodule DocumentViewerWeb.AuthControllerTest do
           |> get("/auth/cognito/callback")
         end)
 
-      assert log =~ "Ueberauth erorr: failed"
+      assert log =~ "Ueberauth error: failed"
     end
   end
 end
