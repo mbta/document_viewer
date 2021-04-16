@@ -10,7 +10,7 @@ defmodule DocumentViewerWeb.Router do
   end
 
   pipeline :ensure_document_viewer_group do
-    plug(DocumentViewerWeb.EnsureDocumentViewerGroup)
+    plug DocumentViewerWeb.EnsureDocumentViewerGroup
   end
 
   pipeline :browser do
