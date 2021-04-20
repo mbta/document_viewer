@@ -44,6 +44,7 @@ defmodule DocumentViewerWeb.ConnCase do
             |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{
               groups: [document_viewer_group]
             })
+            |> Plug.Conn.put_session(:username, user)
 
           {conn, user}
 
@@ -54,6 +55,7 @@ defmodule DocumentViewerWeb.ConnCase do
             Phoenix.ConnTest.build_conn()
             |> Plug.Test.init_test_session(%{})
             |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{groups: []})
+            |> Plug.Conn.put_session(:username, user)
 
           {conn, user}
 

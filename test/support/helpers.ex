@@ -15,4 +15,16 @@ defmodule Test.Support.Helpers do
       end)
     end
   end
+
+  defmacro reassign_log_level(level) do
+    quote do
+      old_level = Logger.level()
+
+      on_exit(fn ->
+        Logger.configure(level: old_level)
+      end)
+
+      Logger.configure(level: unquote(level))
+    end
+  end
 end

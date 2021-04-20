@@ -1,7 +1,16 @@
 defmodule DocumentViewerWeb.AuthControllerTest do
   use DocumentViewerWeb.ConnCase
   use Plug.Test
-  import ExUnit.CaptureLog, only: [capture_log: 1]
+  import ExUnit.CaptureLog
+  import Test.Support.Helpers
+
+  @mock_auth %Ueberauth.Auth{
+    uid: "test@mbta.com",
+    credentials: %Ueberauth.Auth.Credentials{
+      expires_at: System.system_time(:second) + 1_000,
+      other: %{groups: ["test-group"]}
+    }
+  }
 
   describe "GET /auth/:provider" do
     test "redirects to the callback", %{conn: conn} do
@@ -12,22 +21,31 @@ defmodule DocumentViewerWeb.AuthControllerTest do
   end
 
   describe "GET /auth/:provider/callback" do
-    test "redirects to the index page for an ueberauth auth", %{conn: conn} do
-      mock_auth = %Ueberauth.Auth{
-        uid: "test@mbta.com",
-        credentials: %Ueberauth.Auth.Credentials{
-          expires_at: System.system_time(:second) + 1_000,
-          other: %{groups: ["test-group"]}
-        }
-      }
+    setup do
+      reassign_log_level(:info)
+    end
 
+    @tag capture_log: true
+    test "redirects to the index page for an ueberauth auth", %{conn: conn} do
       conn =
         conn
-        |> assign(:ueberauth_auth, mock_auth)
+        |> assign(:ueberauth_auth, @mock_auth)
         |> get("/auth/cognito/callback")
 
       assert redirected_to(conn) == "/"
       assert Guardian.Plug.current_claims(conn)["groups"] == ["test-group"]
+    end
+
+    test "logs a successful login", %{conn: conn} do
+      log =
+        capture_log(fn ->
+          conn
+          |> assign(:ueberauth_auth, @mock_auth)
+          |> get("/auth/cognito/callback")
+        end)
+
+      assert log =~ "test@mbta.com"
+      assert log =~ "action=login"
     end
 
     @tag capture_log: true

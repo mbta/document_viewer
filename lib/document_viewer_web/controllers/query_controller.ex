@@ -1,7 +1,7 @@
 defmodule DocumentViewerWeb.QueryController do
   use DocumentViewerWeb, :controller
 
-  alias DocumentViewerWeb.Query
+  alias DocumentViewerWeb.{Query, UserActionLogger}
   alias Ecto.Changeset
 
   def new(conn, _params) do
@@ -10,6 +10,8 @@ defmodule DocumentViewerWeb.QueryController do
 
   def search(conn, %{"query" => query_params}) do
     lookup_fn = Map.get(conn.assigns, :lookup_fn, &Catalog.lookup/3)
+
+    UserActionLogger.log(get_session(conn, "username"), :search, query_params)
 
     case apply_changes(query_params) do
       {:ok, query} ->

@@ -5,7 +5,7 @@ defmodule DocumentViewerWeb.AuthController do
 
   plug(Ueberauth)
 
-  alias DocumentViewerWeb.AuthManager
+  alias DocumentViewerWeb.{AuthManager, UserActionLogger}
   alias DocumentViewerWeb.Router.Helpers
 
   def request(conn, %{"provider" => provider}) when provider != "cognito" do
@@ -22,6 +22,8 @@ defmodule DocumentViewerWeb.AuthController do
     credentials = auth.credentials
 
     current_time = System.system_time(:second)
+
+    UserActionLogger.log(username, :login)
 
     conn
     |> Guardian.Plug.sign_in(

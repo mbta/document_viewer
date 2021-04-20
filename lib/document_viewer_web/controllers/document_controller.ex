@@ -1,7 +1,11 @@
 defmodule DocumentViewerWeb.DocumentController do
   use DocumentViewerWeb, :controller
 
-  def show(conn, %{"bucket_name" => bucket_name, "file_path" => file_path}) do
+  alias DocumentViewerWeb.UserActionLogger
+
+  def show(conn, %{"bucket_name" => bucket_name, "file_path" => file_path} = params) do
+    UserActionLogger.log(get_session(conn, "username"), :view_document, params)
+
     conn
     |> assign(:bucket_name, bucket_name)
     |> assign(:file_path, file_path)
@@ -17,6 +21,8 @@ defmodule DocumentViewerWeb.DocumentController do
 
     file_name = Path.basename(file_path)
 
+    log_download(conn, params)
+
     url =
       presigned_url(bucket_name, file_path, config_fn, presigned_url_fn,
         query_params: query_params(file_name, params)
@@ -24,6 +30,11 @@ defmodule DocumentViewerWeb.DocumentController do
 
     redirect(conn, external: url)
   end
+
+  defp log_download(conn, %{"download" => "true"} = params),
+    do: UserActionLogger.log(get_session(conn, "username"), :download_document, params)
+
+  defp log_download(_, _), do: :ok
 
   defp query_params(file_name, %{"download" => "true"}),
     do: ["response-content-disposition": "attachment; filename=\"#{file_name}\""]
