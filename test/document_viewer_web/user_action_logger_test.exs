@@ -16,7 +16,9 @@ defmodule DocumentViewerWeb.UserActionLoggerTest do
           UserActionLogger.log("user@mbta.com", :login)
         end)
 
-      assert log =~ "User action: username=user@mbta.com action=login"
+      assert log =~ "User action:"
+      assert log =~ "username=\"user@mbta.com\""
+      assert log =~ "action=:login"
     end
 
     test "logs an action with params" do
@@ -25,7 +27,11 @@ defmodule DocumentViewerWeb.UserActionLoggerTest do
           UserActionLogger.log("user@mbta.com", :login, %{a: 1, b: 2})
         end)
 
-      assert log =~ "User action: username=user@mbta.com action=login a=1 b=2"
+      assert log =~ "User action:"
+      assert log =~ "username=\"user@mbta.com\""
+      assert log =~ "action=:login"
+      assert log =~ "a=1"
+      assert log =~ "b=2"
     end
   end
 end

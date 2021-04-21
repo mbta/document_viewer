@@ -7,17 +7,16 @@ defmodule DocumentViewerWeb.UserActionLogger do
 
   @spec log(String.t(), atom()) :: :ok
   @spec log(String.t(), atom(), map()) :: :ok
-  def log(username, action, params \\ %{}),
-    do: Logger.info("User action: username=#{username} action=#{action}#{params_string(params)}")
+  def log(username, action, params \\ %{}) do
+    params = Map.merge(%{username: username, action: action}, params)
 
-  @spec params_string(map()) :: String.t()
-  defp params_string(params) do
-    Enum.reduce(
-      params,
-      "",
-      fn {key, val}, acc ->
-        "#{acc} #{key}=#{val}"
-      end
-    )
+    Logger.info(["User action: ", params_iodata(params)])
+  end
+
+  @spec params_iodata(map()) :: [iodata()]
+  defp params_iodata(params) do
+    params
+    |> Enum.map(fn {key, value} -> [to_string(key), ?=, inspect(value)] end)
+    |> Enum.intersperse(", ")
   end
 end

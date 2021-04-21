@@ -44,8 +44,8 @@ defmodule DocumentViewerWeb.AuthControllerTest do
           |> get("/auth/cognito/callback")
         end)
 
-      assert log =~ "test@mbta.com"
-      assert log =~ "action=login"
+      assert log =~ "username=\"test@mbta.com\""
+      assert log =~ "action=:login"
     end
 
     @tag capture_log: true

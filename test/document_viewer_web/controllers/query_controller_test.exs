@@ -61,11 +61,11 @@ defmodule DocumentViewerWeb.QueryControllerTest do
           })
         end)
 
-      assert log =~ "test_user"
-      assert log =~ "action=search"
-      assert log =~ "last_name=Ng"
-      assert log =~ "first_name=Mary"
-      assert log =~ "date_of_birth_string=1/1/1970"
+      assert log =~ "username=\"test_user\""
+      assert log =~ "action=:search"
+      assert log =~ "last_name=\"Ng\""
+      assert log =~ "first_name=\"Mary\""
+      assert log =~ "date_of_birth_string=\"1/1/1970\""
     end
 
     @tag capture_log: true

@@ -24,10 +24,10 @@ defmodule DocumentViewerWeb.DocumentControllerTest do
           get(conn, "/documents/BUCKET/FILE.pdf")
         end)
 
-      assert log =~ "test_user"
-      assert log =~ "action=view_document"
-      assert log =~ "bucket_name=BUCKET"
-      assert log =~ "file_path=FILE.pdf"
+      assert log =~ "username=\"test_user\""
+      assert log =~ "action=:view_document"
+      assert log =~ "bucket_name=\"BUCKET\""
+      assert log =~ "file_path=\"FILE.pdf\""
     end
 
     test "unauthenticated, redirects you to cognito auth", %{conn: conn} do
@@ -86,10 +86,10 @@ defmodule DocumentViewerWeb.DocumentControllerTest do
           |> get("/documents/BUCKET/FILE.pdf/pdf?download=true")
         end)
 
-      assert log =~ "test_user"
-      assert log =~ "action=download_document"
-      assert log =~ "bucket_name=BUCKET"
-      assert log =~ "file_path=FILE.pdf"
+      assert log =~ "username=\"test_user\""
+      assert log =~ "action=:download_document"
+      assert log =~ "bucket_name=\"BUCKET\""
+      assert log =~ "file_path=\"FILE.pdf\""
     end
 
     test "unauthenticated, redirects you to cognito auth", %{conn: conn} do
