@@ -1,6 +1,8 @@
 defmodule Test.Support.Helpers do
   @moduledoc "Test helpers"
 
+  import ExUnit.Callbacks
+
   defmacro reassign_env(app, var, value) do
     quote do
       old_value = Application.get_env(unquote(app), unquote(var))
@@ -16,15 +18,13 @@ defmodule Test.Support.Helpers do
     end
   end
 
-  defmacro reassign_log_level(level) do
-    quote do
-      old_level = Logger.level()
+  def reassign_log_level(level) do
+    old_level = Logger.level()
 
-      on_exit(fn ->
-        Logger.configure(level: old_level)
-      end)
+    on_exit(fn ->
+      Logger.configure(level: old_level)
+    end)
 
-      Logger.configure(level: unquote(level))
-    end
+    Logger.configure(level: level)
   end
 end
