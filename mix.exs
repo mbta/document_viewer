@@ -52,6 +52,7 @@ defmodule DocumentViewer.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:ex_aws, "~> 2.1"},
       {:ex_aws_s3, "~> 2.0"},
+      {:ex_aws_secretsmanager, "~> 2.0"},
       {:hackney, "~> 1.17"},
       {:sweet_xml, "~> 0.6.6"},
       {:ueberauth, "~> 0.6.3"},
