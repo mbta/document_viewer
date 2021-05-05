@@ -11,7 +11,7 @@ defmodule DocumentViewer.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      test_coverage: [tool: ExCoveralls],
+      test_coverage: [tool: LcovEx],
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,
@@ -60,7 +60,7 @@ defmodule DocumentViewer.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.14", only: :test}
+      {:lcov_ex, "~> 0.2", only: [:dev, :test], runtime: false}
     ]
   end
 
