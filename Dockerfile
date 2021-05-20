@@ -1,5 +1,5 @@
 # First, get the elixir dependencies within an elixir container
-FROM elixir:1.11.3 AS elixir-builder
+FROM hexpm/elixir:1.11.3-erlang-23.2.5-alpine-3.13.1 AS elixir-builder
 
 ENV LANG="C.UTF-8" MIX_ENV=prod
 
@@ -12,7 +12,7 @@ RUN mix local.hex --force && \
   mix do deps.get --only prod
 
 # Next, build the frontend assets within a node.js container
-FROM node:14.15.5 as assets-builder
+FROM node:14.15-alpine as assets-builder
 
 WORKDIR /root
 ADD . .
@@ -36,10 +36,10 @@ COPY --from=assets-builder /root/priv/static ./priv/static
 RUN mix do compile --force, phx.digest, release
 
 # Finally, use a Debian container for the runtime environment
-FROM debian:buster
+FROM alpine:latest
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  libssl1.1
+RUN apk add --update libssl1.1 ncurses-libs \
+  && rm -rf /var/cache/apk
 
 WORKDIR /root
 EXPOSE 4000
