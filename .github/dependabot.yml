@@ -1,0 +1,26 @@
+version: 2
+updates:
+  - package-ecosystem: mix
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "09:00"
+    open-pull-requests-limit: 10
+    versioning-strategy: lockfile-only
+  - package-ecosystem: npm
+    directory: "/assets"
+    schedule:
+      interval: daily
+      time: "09:00"
+    open-pull-requests-limit: 10
+    versioning-strategy: lockfile-only
+    ignore:
+      - dependency-name: babel-loader
+        versions:
+          - ">= 8.a, < 9"
+      - dependency-name: webpack
+        versions:
+          - ">= 5.a, < 6"
+      - dependency-name: css-loader
+        versions:
+          - 5.2.1
