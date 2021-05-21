@@ -38,18 +38,28 @@ RUN mix do compile --force, phx.digest, release
 # Finally, use a Debian container for the runtime environment
 FROM alpine:latest
 
-RUN apk add --update libssl1.1 ncurses-libs \
+RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init \
   && rm -rf /var/cache/apk
 
-WORKDIR /root
-EXPOSE 4000
-ENV MIX_ENV=prod TERM=xterm LANG="C.UTF-8" PORT=4000
+# Create non-root user
+RUN addgroup -S document_viewer && adduser -S -G document_viewer document_viewer
+USER document_viewer
+WORKDIR /home/document_viewer
+
+# Set environment
+ENV MIX_ENV=prod TERM=xterm LANG="C.UTF-8" PORT=4000 REPLACE_OS_VARS=true
 
 # Add frontend assets with manifests from app-builder container
-COPY --from=app-builder /root/priv/static ./priv/static
+COPY --from=app-builder --chown=document_viewer:document_viewer /root/priv/static ./priv/static
 
 # Add application artifact compiled in app-builder container
-COPY --from=app-builder /root/_build/prod/rel/document_viewer .
+COPY --from=app-builder --chown=document_viewer:document_viewer /root/_build/prod/rel/document_viewer .
 
+EXPOSE 4000
+
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
+# Health Check
+HEALTHCHECK CMD ["bin/document_viewer", "rpc", "1 + 1"]
 # Run the application
 CMD ["bin/document_viewer", "start"]
