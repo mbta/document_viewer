@@ -4,6 +4,8 @@ defmodule Catalog do
   """
   use GenServer
 
+  require Logger
+
   alias Catalog.{Bucket, Document}
 
   @type t :: %__MODULE__{
@@ -54,6 +56,9 @@ defmodule Catalog do
   def handle_continue({:load_documents, opts}, %__MODULE__{ets: ets} = state) do
     documents_fn = Keyword.get(opts, :documents_fn, &all_documents/0)
 
+    start_time = Time.utc_now()
+    Logger.info(fn -> "Loading document metadata" end)
+
     for document <- documents_fn.() do
       _ =
         :ets.insert(
@@ -65,6 +70,12 @@ defmodule Catalog do
 
     # Let the health server know that the data has finished loading
     Catalog.Health.loaded()
+
+    Logger.info(fn ->
+      "Finished loading document metadata, time_in_ms=#{
+        Time.diff(Time.utc_now(), start_time, :millisecond)
+      }"
+    end)
 
     {:noreply, state}
   end
