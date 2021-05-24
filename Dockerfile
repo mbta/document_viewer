@@ -35,8 +35,8 @@ COPY --from=assets-builder /root/priv/static ./priv/static
 
 RUN mix do compile --force, phx.digest, release
 
-# Finally, use a Debian container for the runtime environment
-FROM alpine:latest
+# Finally, use an Alpine container for the runtime environment
+FROM alpine:3.13.1
 
 RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init \
   && rm -rf /var/cache/apk
