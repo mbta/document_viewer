@@ -10,27 +10,19 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :document_viewer, DocumentViewerWeb.Endpoint,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  http: [:inet6, port: System.get_env("PORT") || 4000],
+  url: [host: {:system, "HOST"}, port: 80],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  server: true
 
 # Do not print debug messages in production
 config :logger, level: :info
-
-# Secret key for Guardian. You can use `mix guardian.gen.secret` to get one.
-config :document_viewer, DocumentViewerWeb.AuthManager,
-  secret_key: {System, :get_env, ["GUARDIAN_SECRET_KEY"]}
 
 # Configure Ueberauth to use Cognito
 config :ueberauth, Ueberauth,
   providers: [
     cognito: {Ueberauth.Strategy.Cognito, []}
   ]
-
-config :ueberauth, Ueberauth.Strategy.Cognito,
-  auth_domain: {System, :get_env, ["COGNITO_DOMAIN"]},
-  client_id: {System, :get_env, ["COGNITO_CLIENT_ID"]},
-  user_pool_id: {System, :get_env, ["COGNITO_USER_POOL_ID"]},
-  aws_region: {System, :get_env, ["COGNITO_AWS_REGION"]}
 
 # ## SSL Support
 #
@@ -65,7 +57,3 @@ config :ueberauth, Ueberauth.Strategy.Cognito,
 #       force_ssl: [hsts: true]
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
-
-# Finally import the config/prod.secret.exs which loads secrets
-# and configuration from environment variables.
-import_config "prod.secret.exs"
