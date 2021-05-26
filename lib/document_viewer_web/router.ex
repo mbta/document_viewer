@@ -1,6 +1,12 @@
 defmodule DocumentViewerWeb.Router do
   use DocumentViewerWeb, :router
 
+  pipeline :redirect_prod_http do
+    if Application.get_env(:document_viewer, :redirect_http?) do
+      plug(Plug.SSL, rewrite_on: [:x_forwarded_proto])
+    end
+  end
+
   pipeline :auth do
     plug DocumentViewerWeb.AuthManager.Pipeline
   end
@@ -26,7 +32,7 @@ defmodule DocumentViewerWeb.Router do
   end
 
   scope "/auth", DocumentViewerWeb do
-    pipe_through :browser
+    pipe_through([:redirect_prod_http, :browser])
 
     get("/:provider", AuthController, :request)
     get("/:provider/callback", AuthController, :callback)
@@ -34,6 +40,7 @@ defmodule DocumentViewerWeb.Router do
 
   scope "/", DocumentViewerWeb do
     pipe_through [
+      :redirect_prod_http,
       :browser,
       :auth,
       :ensure_auth,

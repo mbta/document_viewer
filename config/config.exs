@@ -20,6 +20,7 @@ config :document_viewer,
     }
   ],
   live_catalog?: true,
+  redirect_http?: false,
   cognito_group: "document-viewer"
 
 # Configures the endpoint

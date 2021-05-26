@@ -1,5 +1,8 @@
 use Mix.Config
 
+config :document_viewer,
+  redirect_http?: true
+
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
 # when generating URLs.
