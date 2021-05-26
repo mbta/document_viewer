@@ -86,16 +86,15 @@ defmodule Catalog do
     {:reply, results, state}
   end
 
-  @spec populate_ets_table(:ets.tid(), (() -> [t()])) :: [t()]
+  @spec populate_ets_table(:ets.tid(), (() -> [t()])) :: true
   defp populate_ets_table(ets, documents_fn) do
-    for document <- documents_fn.() do
-      _ =
-        :ets.insert(
-          ets,
-          {Document.key(document), document.last_name, document.first_name,
-           document.date_of_birth, document}
-        )
-    end
+    records =
+      for document <- documents_fn.() do
+        {Document.key(document), document.last_name, document.first_name, document.date_of_birth,
+         document}
+      end
+
+    :ets.insert(ets, records)
   end
 
   @spec all_documents() :: [t()]
