@@ -4,6 +4,8 @@ defmodule Catalog do
   """
   use GenServer
 
+  require Logger
+
   alias Catalog.{Bucket, Document}
 
   @type t :: %__MODULE__{
@@ -54,17 +56,16 @@ defmodule Catalog do
   def handle_continue({:load_documents, opts}, %__MODULE__{ets: ets} = state) do
     documents_fn = Keyword.get(opts, :documents_fn, &all_documents/0)
 
-    for document <- documents_fn.() do
-      _ =
-        :ets.insert(
-          ets,
-          {Document.key(document), document.last_name, document.first_name,
-           document.date_of_birth, document}
-        )
-    end
+    Logger.info(fn -> "Loading document metadata" end)
+
+    {time_in_µs, _} = :timer.tc(&populate_ets_table/2, [ets, documents_fn])
 
     # Let the health server know that the data has finished loading
     Catalog.Health.loaded()
+
+    Logger.info(fn ->
+      "Finished loading document metadata, time_in_ms=#{time_in_µs / 1_000}"
+    end)
 
     {:noreply, state}
   end
@@ -83,6 +84,17 @@ defmodule Catalog do
       |> List.flatten()
 
     {:reply, results, state}
+  end
+
+  @spec populate_ets_table(:ets.tid(), (() -> [t()])) :: true
+  defp populate_ets_table(ets, documents_fn) do
+    records =
+      for document <- documents_fn.() do
+        {Document.key(document), document.last_name, document.first_name, document.date_of_birth,
+         document}
+      end
+
+    :ets.insert(ets, records)
   end
 
   @spec all_documents() :: [t()]
