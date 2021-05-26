@@ -2,6 +2,8 @@
 
 Document Viewer is a web application allowing users with permission to view documents saved in secure S3 buckets. These documents might be things like signed forms and identification documents. The user is able to search by last name, first name, and date of birth, and list and view all documents relating to a given person. This functionality is also provided via a RESTful API.
 
+[![Build Status](https://github.com/mbta/document_viewer/actions/workflows/elixir.yml/badge.svg)](https://github.com/mbta/document_viewer/actions/workflows/elixir.yml)
+
 ## Development
 
 To start your Phoenix server:
