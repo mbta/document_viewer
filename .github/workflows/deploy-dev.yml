@@ -3,7 +3,7 @@ name: Deploy to Dev ECS
 on:
   workflow_dispatch:
   push:
-    branches: [$default_branch]
+    branches: [main]
 
 jobs:
   deploy:
