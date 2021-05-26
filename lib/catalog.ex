@@ -55,11 +55,10 @@ defmodule Catalog do
   @spec handle_continue({:load_documents, keyword()}, t()) :: {:noreply, t()}
   def handle_continue({:load_documents, opts}, %__MODULE__{ets: ets} = state) do
     documents_fn = Keyword.get(opts, :documents_fn, &all_documents/0)
-    documents = documents_fn.()
 
     Logger.info(fn -> "Loading document metadata" end)
 
-    {time_in_µs, _} = :timer.tc(&populate_ets_table/2, [ets, documents])
+    {time_in_µs, _} = :timer.tc(&populate_ets_table/2, [ets, documents_fn])
 
     # Let the health server know that the data has finished loading
     Catalog.Health.loaded()
@@ -85,6 +84,18 @@ defmodule Catalog do
       |> List.flatten()
 
     {:reply, results, state}
+  end
+
+  @spec populate_ets_table(:ets.tid(), (() -> [t()])) :: [t()]
+  defp populate_ets_table(ets, documents_fn) do
+    for document <- documents_fn.() do
+      _ =
+        :ets.insert(
+          ets,
+          {Document.key(document), document.last_name, document.first_name,
+           document.date_of_birth, document}
+        )
+    end
   end
 
   @spec all_documents() :: [t()]
@@ -116,18 +127,6 @@ defmodule Catalog do
     |> S3.LineStream.lines()
     |> Stream.map(&Document.from_metadata(&1, bucket_name, file_path))
     |> Enum.to_list()
-  end
-
-  @spec populate_ets_table(:ets.tid(), [t()]) :: [t()]
-  defp populate_ets_table(ets, documents) do
-    for document <- documents do
-      _ =
-        :ets.insert(
-          ets,
-          {Document.key(document), document.last_name, document.first_name,
-           document.date_of_birth, document}
-        )
-    end
   end
 
   @spec search_term(String.t() | Date.t() | nil) :: String.t() | Date.t() | atom()
