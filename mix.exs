@@ -60,7 +60,8 @@ defmodule DocumentViewer.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
-      {:lcov_ex, "~> 0.2", only: [:dev, :test], runtime: false}
+      {:lcov_ex, "~> 0.2", only: [:dev, :test], runtime: false},
+      {:stream_data, "~> 0.5", only: :test}
     ]
   end
 
