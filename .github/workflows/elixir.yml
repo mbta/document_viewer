@@ -31,14 +31,7 @@ jobs:
           path: ~/.asdf
           key: ${{ runner.os }}-asdf-v2-${{ hashFiles('.tool-versions') }}
         id: asdf-cache
-      - name: Setup ASDF environment
-        run: |
-          ASDF_DIR=$HOME/.asdf
-          echo "ASDF_DIR=$ASDF_DIR" >> $GITHUB_ENV
-          echo "ASDF_DATA_DIR=$ASDF_DIR" >> $GITHUB_ENV
-          echo "$ASDF_DIR/bin" >> $GITHUB_PATH
-          echo "$ASDF_DIR/shims" >> $GITHUB_PATH
-          $ASDF_DIR/bin/asdf reshim
+      - uses: mbta/actions/reshim-asdf@v1
       - uses: actions/checkout@v2
       - name: Restore dependencies cache
         id: deps-cache
