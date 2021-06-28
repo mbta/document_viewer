@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: asdf
     steps:
+      - uses: actions/checkout@v2
       - name: ASDF cache
         uses: actions/cache@v2
         with:
@@ -32,7 +33,9 @@ jobs:
           key: ${{ runner.os }}-asdf-v2-${{ hashFiles('.tool-versions') }}
         id: asdf-cache
       - uses: mbta/actions/reshim-asdf@v1
-      - uses: actions/checkout@v2
+      # The asdf job should have prepared the cache. exit if it didn't for some reason
+      - run: exit 1
+        if: steps.asdf-cache.outputs.cache-hit != 'true'
       - name: Restore dependencies cache
         id: deps-cache
         uses: actions/cache@v2
