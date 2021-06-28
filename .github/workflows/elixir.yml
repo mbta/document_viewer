@@ -32,6 +32,9 @@ jobs:
           key: ${{ runner.os }}-asdf-v2-${{ hashFiles('.tool-versions') }}
         id: asdf-cache
       - uses: mbta/actions/reshim-asdf@v1
+      # The asdf job should have prepared the cache. exit if it didn't for some reason
+      - run: exit 1
+        if: steps.asdf-cache.outputs.cache-hit != 'true'
       - uses: actions/checkout@v2
       - name: Restore dependencies cache
         id: deps-cache
