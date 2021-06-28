@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: asdf
     steps:
+      - uses: actions/checkout@v2
       - name: ASDF cache
         uses: actions/cache@v2
         with:
@@ -35,7 +36,6 @@ jobs:
       # The asdf job should have prepared the cache. exit if it didn't for some reason
       - run: exit 1
         if: steps.asdf-cache.outputs.cache-hit != 'true'
-      - uses: actions/checkout@v2
       - name: Restore dependencies cache
         id: deps-cache
         uses: actions/cache@v2
