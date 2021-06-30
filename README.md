@@ -8,6 +8,7 @@ Document Viewer is a web application allowing users with permission to view docu
 
 To start your Phoenix server:
 
+- Install asdf tools with `asdf install`
 - Install dependencies with `mix deps.get`
 - Install Node.js dependencies with `npm install` inside the `assets` directory
 - Start Phoenix endpoint with `mix phx.server`
