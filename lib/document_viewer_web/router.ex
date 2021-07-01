@@ -51,6 +51,7 @@ defmodule DocumentViewerWeb.Router do
     post("/", QueryController, :search)
     get("/documents/:bucket_name/:file_path", DocumentController, :show)
     get("/documents/:bucket_name/:file_path/pdf", DocumentController, :pdf)
+    resources "/upload", UploadController, only: [:new, :create]
   end
 
   # Load balancer health check

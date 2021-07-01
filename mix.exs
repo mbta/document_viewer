@@ -57,6 +57,7 @@ defmodule DocumentViewer.MixProject do
       {:ueberauth, "~> 0.6.3"},
       {:ueberauth_cognito, "~> 0.2.0"},
       {:guardian, "~> 2.1"},
+      {:elixir_uuid, "~> 1.2"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
