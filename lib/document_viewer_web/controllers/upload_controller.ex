@@ -4,7 +4,9 @@ defmodule DocumentViewerWeb.UploadController do
   @upload_bucket "mbta-mss-test-uploads"
 
   def new(conn, _params) do
-    render(conn, "new.html")
+    conn
+    |> assign_csrf_token()
+    |> render("new.html")
   end
 
   def create(conn, %{"file" => file}) do
@@ -17,6 +19,7 @@ defmodule DocumentViewerWeb.UploadController do
 
     conn
     |> put_flash(:success, "File uploaded successfully!")
+    |> assign_csrf_token()
     |> render("new.html")
   end
 
@@ -27,4 +30,7 @@ defmodule DocumentViewerWeb.UploadController do
 
     "#{file_uuid}.#{file_extension}"
   end
+
+  defp assign_csrf_token(conn),
+    do: assign(conn, :csrf_token, Plug.CSRFProtection.get_csrf_token())
 end
