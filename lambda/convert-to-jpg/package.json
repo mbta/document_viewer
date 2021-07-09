@@ -1,0 +1,16 @@
+{
+  "name": "convert-to-jpg",
+  "version": "0.0.1",
+  "repository": {},
+  "description": " ",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.941.0",
+    "sharp": "^0.28.3"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6"
+  }
+}
