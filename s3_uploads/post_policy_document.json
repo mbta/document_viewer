@@ -1,0 +1,12 @@
+{
+  "expiration": "2121-12-01T12:00:00.000Z",
+  "conditions": [
+    { "bucket": "mbta-mss-test-uploads" },
+    { "success_action_status": 201 },
+    {
+      "x-amz-credential": "AKIAIOSFODNN7EXAMPLE/20151229/us-east-1/s3/aws4_request"
+    },
+    { "x-amz-algorithm": "AWS4-HMAC-SHA256" },
+    { "x-amz-date": "20210721T000000Z" }
+  ]
+}
