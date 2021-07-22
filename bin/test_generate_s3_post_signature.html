@@ -1,0 +1,28 @@
+<html>
+  <head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+  </head>
+  <body>
+
+  <form action="http://mbta-mss-test-uploads.s3.amazonaws.com/" method="post" enctype="multipart/form-data">
+    <!-- Key to upload -->
+    <input type="hidden" name="key" value="seder_knee.jpg" />
+    <input type="hidden" name="success_action_status" value="201" />
+    <input type="hidden" name="X-Amz-Credential" value="AKIAIOSFODNN7EXAMPLE/20210721/us-east-1/s3/aws4_request" />
+    <input type="hidden" name="X-Amz-Algorithm" value="AWS4-HMAC-SHA256" />
+    <input type="hidden" name="X-Amz-Date" value="20210721T000000Z" />
+
+    <!-- Tags for File -->
+    <input type="hidden" name="Policy" value="eyJleHBpcmF0aW9uIjogIjIxMjEtMTItMDFUMTI6MDA6MDAuMDAwWiIsImNvbmRpdGlvbnMiOiBbeyAiYnVja2V0IjogIm1idGEtbXNzLXRlc3QtdXBsb2FkcyIgfSxbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAiIl0seyAic3VjY2Vzc19hY3Rpb25fc3RhdHVzIjogIjIwMSIgfSx7IngtYW16LWNyZWRlbnRpYWwiOiAiQUtJQVdLRFVDNjdPVjVRU0tXM1EvMjAyMTA3MjEvdXMtZWFzdC0xL3MzL2F3czRfcmVxdWVzdCJ9LHsgIngtYW16LWFsZ29yaXRobSI6ICJBV1M0LUhNQUMtU0hBMjU2IiB9LHsgIngtYW16LWRhdGUiOiAiMjAyMTA3MjFUMDAwMDAwWiIgfV19" />
+    <input type="hidden" name="X-Amz-Signature" value="d30dbd35129fa7006b77a07bac52562ccb97f59b769a21d9558a9a5368d7f662" />
+
+    <!-- File -->
+    <input type="file" name="file" /> <br />
+
+    <!-- The elements after this will be ignored -->
+    <input type="submit" name="submit" value="Upload to Amazon S3" />
+  </form>
+  
+</html>
