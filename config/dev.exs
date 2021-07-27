@@ -59,6 +59,10 @@ config :document_viewer, DocumentViewerWeb.Endpoint,
 
 config :document_viewer, DocumentViewerWeb.AuthManager, secret_key: "dev key"
 
+config :ex_aws,
+  access_key_id: [{:system, "AWS_ACCESS_KEY_ID"}, :instance_role],
+  secret_access_key: [{:system, "AWS_SECRET_ACCESS_KEY"}, :instance_role]
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 

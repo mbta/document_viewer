@@ -51,6 +51,7 @@ defmodule DocumentViewerWeb.Router do
     post("/", QueryController, :search)
     get("/documents/:bucket_name/:file_path", DocumentController, :show)
     get("/documents/:bucket_name/:file_path/pdf", DocumentController, :pdf)
+    get("/upload", UploadController, :new)
   end
 
   # Load balancer health check
@@ -60,9 +61,11 @@ defmodule DocumentViewerWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", DocumentViewerWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", DocumentViewerWeb do
+    pipe_through :api
+
+    get("/upload", UploadController, :new)
+  end
 
   # Enables LiveDashboard only for development
   #

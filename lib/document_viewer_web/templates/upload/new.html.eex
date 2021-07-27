@@ -1,0 +1,37 @@
+<script>
+const uploadFile = (target) => {
+  // TODO: Get extension from file instead of hard-coding it.
+
+  fetch("/api/upload?extension=jpg", {method: "GET"})
+  .then(response => response.json())
+  .then(({upload_url: uploadUrl}) => {
+    const photo = document.getElementById("file-input").files[0];
+
+    fetch(uploadUrl, {method: "PUT", body: photo})
+      .then((res) => {
+        debugger;
+        console.log("Uploaded:", res)
+      })
+      .catch((error) => {
+        debugger;
+        console.error('Upload error:', error);
+      });
+  })
+  .catch((error) => {
+    debugger;
+    console.error('URL error:', error);
+  });
+}
+</script>
+
+<section class="row">
+  <div class="column">
+    <h2>Upload</h2>
+
+    <form>
+      <input type="file" id="file-input" name="file-input" accept="image/*, application/pdf">
+      <br>
+    </form>
+    <button onclick="javascript:uploadFile(this);">Upload via JS</button>
+  </div>
+</section>
