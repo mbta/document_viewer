@@ -19,6 +19,10 @@ defmodule DocumentViewerWeb.Router do
     plug DocumentViewerWeb.EnsureDocumentViewerGroup
   end
 
+  pipeline :ensure_token do
+    plug DocumentViewerWeb.EnsureApiAuthToken
+  end
+
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
@@ -60,9 +64,11 @@ defmodule DocumentViewerWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", DocumentViewerWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", DocumentViewerWeb do
+    pipe_through [:api, :ensure_token]
+
+    post "/upload", UploadController, :create
+  end
 
   # Enables LiveDashboard only for development
   #
