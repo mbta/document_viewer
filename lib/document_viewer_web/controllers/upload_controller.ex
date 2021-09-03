@@ -1,6 +1,8 @@
 defmodule DocumentViewerWeb.UploadController do
   use DocumentViewerWeb, :controller
 
+  alias DocumentViewer.Uploads
+
   def create(conn, %{
         "file" => file = %Plug.Upload{filename: filename},
         "environment" => environment,

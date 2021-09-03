@@ -1,4 +1,4 @@
-defmodule Uploads do
+defmodule DocumentViewer.Uploads do
   @moduledoc """
   Manages Reduced Fares uploads into S3.
   """

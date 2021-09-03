@@ -1,5 +1,7 @@
-defmodule UploadsTest do
+defmodule DocumentViewer.UploadsTest do
   use ExUnit.Case, async: true
+
+  alias DocumentViewer.Uploads
 
   @mock_file <<0, 255, 42>>
 
