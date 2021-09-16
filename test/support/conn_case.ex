@@ -60,12 +60,12 @@ defmodule DocumentViewerWeb.ConnCase do
           {conn, user}
 
         tags[:with_api_token] ->
-          api_auth_token = Application.get_env(:document_viewer, :api_auth_token)
+          api_auth_tokens = Application.get_env(:document_viewer, :api_auth_tokens)
 
           conn =
             Phoenix.ConnTest.build_conn()
             |> Plug.Test.init_test_session(%{})
-            |> Plug.Conn.put_req_header("authorization", "Bearer #{api_auth_token}")
+            |> Plug.Conn.put_req_header("authorization", "Bearer #{api_auth_tokens}")
 
           {conn, nil}
 
