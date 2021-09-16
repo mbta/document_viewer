@@ -40,10 +40,12 @@ defmodule DocumentViewerWeb.EnsureApiAuthToken do
       |> Keyword.get(:api_auth_tokens)
       |> String.split(",")
 
-    if Enum.any?(api_auth_tokens, &Plug.Crypto.secure_compare(token, &1)) do
-      :ok
-    else
-      :error
-    end
+    Enum.reduce(api_auth_tokens, :error, fn to_compare, acc ->
+      if Plug.Crypto.secure_compare(token, to_compare) do
+        :ok
+      else
+        acc
+      end
+    end)
   end
 end
