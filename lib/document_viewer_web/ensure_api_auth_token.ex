@@ -35,10 +35,7 @@ defmodule DocumentViewerWeb.EnsureApiAuthToken do
 
   @spec verify_token(String.t(), keyword()) :: :ok | :error
   defp verify_token(token, opts) do
-    api_auth_tokens =
-      opts
-      |> Keyword.get(:api_auth_tokens)
-      |> String.split(",")
+    api_auth_tokens = Keyword.get(opts, :api_auth_tokens)
 
     Enum.reduce(api_auth_tokens, :error, fn to_compare, acc ->
       if Plug.Crypto.secure_compare(token, to_compare) do

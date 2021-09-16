@@ -18,7 +18,7 @@ defmodule DocumentViewerWeb.EnsureApiAuthTokenTest do
     end
 
     test "supports multiple, comma-separated API tokens", %{conn: conn} do
-      opts = [api_auth_tokens: "123,456"]
+      opts = [api_auth_tokens: ["123", "456"]]
 
       conn = Plug.Conn.put_req_header(conn, "authorization", "Bearer 456")
 
