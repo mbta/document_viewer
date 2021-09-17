@@ -2,7 +2,7 @@ use Mix.Config
 
 config :document_viewer,
   live_catalog?: false,
-  api_auth_token: "TEST_TOKEN"
+  api_auth_tokens: ["TEST_TOKEN"]
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.

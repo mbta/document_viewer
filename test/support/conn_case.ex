@@ -60,7 +60,10 @@ defmodule DocumentViewerWeb.ConnCase do
           {conn, user}
 
         tags[:with_api_token] ->
-          api_auth_token = Application.get_env(:document_viewer, :api_auth_token)
+          api_auth_token =
+            :document_viewer
+            |> Application.get_env(:api_auth_tokens)
+            |> List.first()
 
           conn =
             Phoenix.ConnTest.build_conn()
