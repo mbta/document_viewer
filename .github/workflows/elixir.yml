@@ -24,6 +24,8 @@ jobs:
     name: Build and test
     runs-on: ubuntu-latest
     needs: asdf
+    env:
+      SECRET_KEY_BASE: local_secret_key_base_at_least_64_bytes_________________________________
     steps:
       - uses: actions/checkout@v2
       - name: ASDF cache

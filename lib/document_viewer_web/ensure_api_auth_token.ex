@@ -5,13 +5,7 @@ defmodule DocumentViewerWeb.EnsureApiAuthToken do
 
   import Plug.Conn
 
-  def init(opts) do
-    Keyword.put_new(
-      opts,
-      :api_auth_tokens,
-      Application.get_env(:document_viewer, :api_auth_tokens)
-    )
-  end
+  def init(opts), do: opts
 
   def call(conn, opts) do
     with {:ok, token} <- get_token(conn),
@@ -34,8 +28,8 @@ defmodule DocumentViewerWeb.EnsureApiAuthToken do
   end
 
   @spec verify_token(String.t(), keyword()) :: :ok | :error
-  defp verify_token(token, opts) do
-    api_auth_tokens = Keyword.get(opts, :api_auth_tokens)
+  defp verify_token(token, _opts) do
+    api_auth_tokens = Application.get_env(:document_viewer, :api_auth_tokens)
 
     Enum.reduce(api_auth_tokens, :error, fn to_compare, acc ->
       if Plug.Crypto.secure_compare(token, to_compare) do
