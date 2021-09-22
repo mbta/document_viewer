@@ -14,7 +14,7 @@ config :document_viewer,
 # before starting your production server.
 config :document_viewer, DocumentViewerWeb.Endpoint,
   http: [:inet6, port: System.get_env("PORT") || 4000],
-  url: [host: {:system, "HOST"}, port: 80],
+  url: [port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true
 
