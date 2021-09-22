@@ -1,9 +1,11 @@
 import Config
 
 if host = System.get_env("HOST") do
-  config :document_viewer, DocumentViewerWeb.Endpoint,
-    url: [host: host, port: 80],
-    secret_key_base: System.get_env("SECRET_KEY_BASE")
+  config :document_viewer, DocumentViewerWeb.Endpoint, url: [host: host, port: 80]
+end
+
+if secret_key_base = System.get_env("SECRET_KEY_BASE") do
+  config :document_viewer, DocumentViewerWeb.Endpoint, secret_key_base: secret_key_base
 end
 
 if guardian_secret_key = System.get_env("GUARDIAN_SECRET_KEY") do
