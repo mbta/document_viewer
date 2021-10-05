@@ -33,6 +33,6 @@ defmodule DocumentViewer.Uploads do
     file_extension = Path.extname(filename)
     file_uuid = UUID.uuid4(:hex)
 
-    "#{environment}/#{form}/#{file_uuid}.#{file_extension}"
+    "#{environment}/#{form}/#{file_uuid}#{file_extension}"
   end
 end

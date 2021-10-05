@@ -29,7 +29,7 @@ defmodule DocumentViewer.UploadsTest do
       {:ok, %{path: path}} =
         Uploads.upload(@mock_file, "test.jpg", "pre-prod", "youth-pass", opts)
 
-      assert Regex.match?(~r/^pre-prod\/youth-pass\/.+\.jpg$/, path)
+      assert Regex.match?(~r/^pre-prod\/youth-pass\/[0-9a-f]+\.jpg$/, path)
     end
 
     test "returns an error if the upload fails" do
