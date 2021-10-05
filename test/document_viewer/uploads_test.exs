@@ -10,7 +10,7 @@ defmodule DocumentViewer.UploadsTest do
       opts = [
         put_object_fn: fn _, _, _ -> :ok end,
         request_fn: fn _ ->
-          {:ok, %{body: "", headers: [], status_code: 200}}
+          %{body: "", headers: [], status_code: 200}
         end
       ]
 
@@ -22,7 +22,7 @@ defmodule DocumentViewer.UploadsTest do
       opts = [
         put_object_fn: fn _, _, _ -> :ok end,
         request_fn: fn _ ->
-          {:ok, %{body: "", headers: [], status_code: 200}}
+          %{body: "", headers: [], status_code: 200}
         end
       ]
 
@@ -36,7 +36,7 @@ defmodule DocumentViewer.UploadsTest do
       opts = [
         put_object_fn: fn _, _, _ -> :ok end,
         request_fn: fn _ ->
-          {:ok, %{body: "", headers: [], status_code: 500}}
+          %{body: "", headers: [], status_code: 500}
         end
       ]
 
