@@ -10,7 +10,7 @@ defmodule DocumentViewer.UploadsTest do
       opts = [
         put_object_fn: fn _, _, _ -> :ok end,
         request_fn: fn _ ->
-          {:ok, %{body: "", headers: [], status_code: 200}}
+          %{body: "", headers: [], status_code: 200}
         end
       ]
 
@@ -22,21 +22,21 @@ defmodule DocumentViewer.UploadsTest do
       opts = [
         put_object_fn: fn _, _, _ -> :ok end,
         request_fn: fn _ ->
-          {:ok, %{body: "", headers: [], status_code: 200}}
+          %{body: "", headers: [], status_code: 200}
         end
       ]
 
       {:ok, %{path: path}} =
         Uploads.upload(@mock_file, "test.jpg", "pre-prod", "youth-pass", opts)
 
-      assert Regex.match?(~r/^pre-prod\/youth-pass\/.+\.jpg$/, path)
+      assert Regex.match?(~r/^pre-prod\/youth-pass\/[0-9a-f]+\.jpg$/, path)
     end
 
     test "returns an error if the upload fails" do
       opts = [
         put_object_fn: fn _, _, _ -> :ok end,
         request_fn: fn _ ->
-          {:ok, %{body: "", headers: [], status_code: 500}}
+          %{body: "", headers: [], status_code: 500}
         end
       ]
 
