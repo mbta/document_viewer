@@ -17,7 +17,8 @@ defmodule DocumentViewer.MixProject do
         "coveralls.detail": :test,
         "coveralls.json": :test,
         "coveralls.html": :test
-      ]
+      ],
+      dialyzer: [plt_add_apps: [:mix]]
     ]
   end
 
@@ -27,7 +28,7 @@ defmodule DocumentViewer.MixProject do
   def application do
     [
       mod: {DocumentViewer.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :oauth2]
     ]
   end
 
@@ -58,6 +59,7 @@ defmodule DocumentViewer.MixProject do
       {:ueberauth_cognito, "~> 0.2.0"},
       {:guardian, "~> 2.1"},
       {:elixir_uuid, "~> 1.2"},
+      {:oauth2, "~> 2.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},

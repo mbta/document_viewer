@@ -10,9 +10,10 @@ defmodule DocumentViewer.Uploads do
   def upload(file, original_filename, environment, form, opts \\ []) do
     put_object_fn = Keyword.get(opts, :put_object_fn, &ExAws.S3.put_object/3)
     request_fn = Keyword.get(opts, :request_fn, &ExAws.request!/1)
+    folder = Keyword.get(opts, :folder)
 
     with bucket <- upload_bucket(),
-         path <- unique_filename(original_filename, environment, form),
+         path <- unique_filename(original_filename, environment, form, folder),
          %{status_code: 200} <-
            bucket
            |> put_object_fn.(path, file)
@@ -28,12 +29,19 @@ defmodule DocumentViewer.Uploads do
     Application.fetch_env!(:document_viewer, :upload_bucket)
   end
 
-  @spec unique_filename(String.t(), String.t(), String.t()) :: String.t()
-  defp unique_filename(filename, environment, form) do
+  @spec unique_filename(String.t(), String.t(), String.t(), String.t() | nil) :: String.t()
+  defp unique_filename(filename, environment, form, folder) do
     file_extension = Path.extname(filename)
     file_uuid = UUID.uuid4(:hex)
 
-    "#{environment}/#{form}/#{file_uuid}#{file_extension}"
+    [
+      environment,
+      form,
+      folder,
+      "#{file_uuid}#{file_extension}"
+    ]
+    |> Enum.reject(&is_nil/1)
+    |> Enum.join("/")
   end
 
   @spec s3_url(String.t(), String.t()) :: String.t()

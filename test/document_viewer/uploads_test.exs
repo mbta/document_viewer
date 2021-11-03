@@ -32,6 +32,20 @@ defmodule DocumentViewer.UploadsTest do
       assert url =~ ~r/preprod\/youth-pass\/[0-9a-f]+\.jpg$/
     end
 
+    test "accepts an optional folder to nest the file in" do
+      opts = [
+        put_object_fn: fn _, _, _ -> :ok end,
+        request_fn: fn _ ->
+          %{body: "", headers: [], status_code: 200}
+        end,
+        folder: "TEST-FOLDER"
+      ]
+
+      {:ok, url} = Uploads.upload(@mock_file, "test.jpg", "preprod", "youth-pass", opts)
+
+      assert url =~ ~r/preprod\/youth-pass\/TEST-FOLDER\/[0-9a-f]+\.jpg$/
+    end
+
     test "returns an error if the upload fails" do
       opts = [
         put_object_fn: fn _, _, _ -> :ok end,
