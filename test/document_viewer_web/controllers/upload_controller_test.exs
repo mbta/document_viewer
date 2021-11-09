@@ -4,8 +4,10 @@ defmodule DocumentViewerWeb.UploadControllerTest do
   describe "create: POST /api/upload" do
     @tag :with_api_token
     test "returns the bucket and path where the file was uploaded", %{conn: conn} do
+      mock_s3_url = "https://TEST-BUCKET.s3.amazonaws.com/TEST-ENV/TEST-FORM/TEST-FILE.jpg"
+
       upload_fn = fn _, _, _, _ ->
-        {:ok, %{bucket: "TEST_BUCKET", path: "TEST_PATH"}}
+        {:ok, mock_s3_url}
       end
 
       upload = %Plug.Upload{
@@ -22,7 +24,7 @@ defmodule DocumentViewerWeb.UploadControllerTest do
           :form => "youth-pass"
         })
 
-      assert json_response(conn, 200) == %{"bucket" => "TEST_BUCKET", "path" => "TEST_PATH"}
+      assert json_response(conn, 200) == %{"s3_url" => mock_s3_url}
     end
 
     @tag :with_api_token

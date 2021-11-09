@@ -17,7 +17,7 @@ defmodule DocumentViewer.Uploads do
            bucket
            |> put_object_fn.(path, file)
            |> request_fn.() do
-      {:ok, %{bucket: bucket, path: path}}
+      {:ok, s3_url(bucket, path)}
     else
       _ -> :error
     end
@@ -35,4 +35,7 @@ defmodule DocumentViewer.Uploads do
 
     "#{environment}/#{form}/#{file_uuid}#{file_extension}"
   end
+
+  @spec s3_url(String.t(), String.t()) :: String.t()
+  defp s3_url(bucket, path), do: "https://#{bucket}.s3.amazonaws.com/#{path}"
 end
