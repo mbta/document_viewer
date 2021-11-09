@@ -12,9 +12,9 @@ defmodule DocumentViewerWeb.UploadController do
 
     {:ok, file_binary} = File.read(file.path)
 
-    {:ok, %{bucket: bucket, path: path}} = upload_fn.(file_binary, filename, environment, form)
+    {:ok, s3_url} = upload_fn.(file_binary, filename, environment, form)
 
-    json(conn, %{bucket: bucket, path: path})
+    json(conn, %{s3_url: s3_url})
   end
 
   def create(conn, _) do

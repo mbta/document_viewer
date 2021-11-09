@@ -4,9 +4,9 @@ defmodule DocumentViewer.Uploads do
   """
 
   @spec upload(binary(), String.t(), String.t(), String.t()) ::
-          {:ok, %{bucket: String.t(), path: String.t()}} | :error
+          {:ok, String.t()} | :error
   @spec upload(binary(), String.t(), String.t(), String.t(), keyword()) ::
-          {:ok, %{bucket: String.t(), path: String.t()}} | :error
+          {:ok, String.t()} | :error
   def upload(file, original_filename, environment, form, opts \\ []) do
     put_object_fn = Keyword.get(opts, :put_object_fn, &ExAws.S3.put_object/3)
     request_fn = Keyword.get(opts, :request_fn, &ExAws.request!/1)
@@ -17,7 +17,7 @@ defmodule DocumentViewer.Uploads do
            bucket
            |> put_object_fn.(path, file)
            |> request_fn.() do
-      {:ok, %{bucket: bucket, path: path}}
+      {:ok, s3_url(bucket, path)}
     else
       _ -> :error
     end
@@ -35,4 +35,7 @@ defmodule DocumentViewer.Uploads do
 
     "#{environment}/#{form}/#{file_uuid}#{file_extension}"
   end
+
+  @spec s3_url(String.t(), String.t()) :: String.t()
+  defp s3_url(bucket, path), do: "https://#{bucket}.s3.amazonaws.com/#{path}"
 end
