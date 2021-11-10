@@ -4,15 +4,16 @@ defmodule DocumentViewerWeb.UploadController do
   alias DocumentViewer.Uploads
 
   def create(conn, %{
-        "file" => file = %Plug.Upload{filename: filename},
+        "file" => encoded_file,
+        "name" => name,
         "environment" => environment,
         "form" => form
       }) do
     upload_fn = Map.get(conn.assigns, :upload_fn, &Uploads.upload/4)
 
-    {:ok, file_binary} = File.read(file.path)
+    file_binary = :base64.decode(encoded_file)
 
-    {:ok, s3_url} = upload_fn.(file_binary, filename, environment, form)
+    {:ok, s3_url} = upload_fn.(file_binary, name, environment, form)
 
     json(conn, %{s3_url: s3_url})
   end
