@@ -14,7 +14,7 @@ defmodule DocumentViewer.UploadsTest do
         end
       ]
 
-      assert {:ok, url} = Uploads.upload(@mock_file, "test.jpg", "pre-prod", "youth-pass", opts)
+      assert {:ok, url} = Uploads.upload(@mock_file, "test.jpg", "preprod", "youth-pass", opts)
 
       assert url =~ ~r/https:\/\/#{upload_bucket()}\.s3\.amazonaws\.com\/.+/
     end
@@ -27,9 +27,9 @@ defmodule DocumentViewer.UploadsTest do
         end
       ]
 
-      {:ok, url} = Uploads.upload(@mock_file, "test.jpg", "pre-prod", "youth-pass", opts)
+      {:ok, url} = Uploads.upload(@mock_file, "test.jpg", "preprod", "youth-pass", opts)
 
-      assert url =~ ~r/pre-prod\/youth-pass\/[0-9a-f]+\.jpg$/
+      assert url =~ ~r/preprod\/youth-pass\/[0-9a-f]+\.jpg$/
     end
 
     test "returns an error if the upload fails" do
@@ -40,7 +40,7 @@ defmodule DocumentViewer.UploadsTest do
         end
       ]
 
-      assert Uploads.upload(@mock_file, "test.jpg", "pre-prod", "youth-pass", opts) == :error
+      assert Uploads.upload(@mock_file, "test.jpg", "preprod", "youth-pass", opts) == :error
     end
   end
 

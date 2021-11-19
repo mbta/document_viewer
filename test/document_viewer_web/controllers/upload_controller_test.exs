@@ -16,7 +16,7 @@ defmodule DocumentViewerWeb.UploadControllerTest do
         |> post("/api/upload", %{
           :file => base_64_encoded_file(),
           :name => "TEST.jpg",
-          :environment => "pre-prod",
+          :environment => "preprod",
           :form => "youth-pass"
         })
 
