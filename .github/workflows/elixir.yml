@@ -18,7 +18,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.asdf
-          key: ${{ runner.os }}-asdf-v2-${{ hashFiles('.tool-versions') }}
+          key: ${{ runner.os }}-asdf-v3-${{ hashFiles('.tool-versions') }}
         id: asdf-cache
       # only run `asdf install` if we didn't hit the cache
       - uses: asdf-vm/actions/install@v1
@@ -41,7 +41,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.asdf
-          key: ${{ runner.os }}-asdf-v2-${{ hashFiles('.tool-versions') }}
+          key: ${{ runner.os }}-asdf-v3-${{ hashFiles('.tool-versions') }}
         id: asdf-cache
       - uses: mbta/actions/reshim-asdf@v1
       # The asdf job should have prepared the cache. exit if it didn't for some reason
@@ -52,8 +52,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-          restore-keys: ${{ runner.os }}-mix-
+          key: ${{ runner.os }}-mix-v2-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-v2-
       - name: Install dependencies (if needed)
         if: steps.deps-cache.outputs.cache-hit != 'true'
         run: mix deps.get
