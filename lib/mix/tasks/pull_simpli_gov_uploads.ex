@@ -51,7 +51,7 @@ defmodule Mix.Tasks.PullSimpliGovUploads do
     end
   end
 
-  def uploaded_workflow_ids() do
+  def uploaded_workflow_ids do
     :document_viewer
     |> Application.fetch_env!(:upload_bucket)
     |> ExAws.S3.list_objects_v2(prefix: "prod/youth-pass/")
