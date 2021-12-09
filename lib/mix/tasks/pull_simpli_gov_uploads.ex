@@ -19,7 +19,16 @@ defmodule Mix.Tasks.PullSimpliGovUploads do
     client = SimpliGov.client(site)
     workflows = SimpliGov.workflows(client)
 
-    for workflow <- workflows do
+    Logger.info("Number of workflows in query result: #{length(workflows)}")
+
+    uploaded_workflow_ids = uploaded_workflow_ids()
+
+    new_workflows =
+      Enum.reject(workflows, &Enum.member?(uploaded_workflow_ids, Workflow.instance_id(&1)))
+
+    Logger.info("Number of workflows that have not yet been uploaded: #{length(new_workflows)}")
+
+    for workflow <- new_workflows do
       workflow_instance_id = Workflow.instance_id(workflow)
 
       Logger.info("Uploading documents for workflow: #{workflow_instance_id}")
@@ -41,4 +50,26 @@ defmodule Mix.Tasks.PullSimpliGovUploads do
       end
     end
   end
+
+  def uploaded_workflow_ids() do
+    :document_viewer
+    |> Application.fetch_env!(:upload_bucket)
+    |> ExAws.S3.list_objects_v2(prefix: "prod/youth-pass/")
+    |> ExAws.stream!()
+    |> Stream.map(& &1.key)
+    |> Stream.map(fn path ->
+      case Regex.named_captures(~r/prod\/youth-pass\/(?<id>.+)\/.+/, path) do
+        %{"id" => id} ->
+          id
+
+        _ ->
+          nil
+      end
+    end)
+    |> Stream.reject(&is_nil/1)
+    |> Stream.uniq()
+    |> Enum.to_list()
+  end
 end
+
+# Mix.Tasks.PullSimpliGovUploads.uploaded_workflow_ids()
