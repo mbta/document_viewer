@@ -58,7 +58,9 @@ defmodule SimpliGov do
       # Only pull documents attached to Youth Pass applications
       "WorkflowTemplateName eq 'Youth Pass'",
       # Wait for a period to give the "push" functionality a chance to copy the file over to S3
-      "WorkflowInstanceCreated lt #{ten_minutes_ago_string()}"
+      # "WorkflowInstanceCreated lt #{ten_minutes_ago_string()}"
+      # Query for only applications created at before 4pm eastern, 12/02/2021 when we started pushing
+      "WorkflowInstanceCreated lt 2021-12-02T21:00:00Z"
     ]
 
     opts = [
@@ -91,12 +93,12 @@ defmodule SimpliGov do
 
   # Returns a date-time for ten minutes ago, truncated to the nearest second,
   # and formatted using ISO 8601.
-  @spec ten_minutes_ago_string() :: String.t()
-  defp ten_minutes_ago_string do
-    "Etc/UTC"
-    |> DateTime.now!()
-    |> DateTime.add(-600, :second)
-    |> DateTime.truncate(:second)
-    |> DateTime.to_iso8601()
-  end
+  # @spec ten_minutes_ago_string() :: String.t()
+  # defp ten_minutes_ago_string do
+  #   "Etc/UTC"
+  #   |> DateTime.now!()
+  #   |> DateTime.add(-600, :second)
+  #   |> DateTime.truncate(:second)
+  #   |> DateTime.to_iso8601()
+  # end
 end
