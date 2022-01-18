@@ -12,7 +12,7 @@ RUN mix local.hex --force && \
   mix do deps.get --only prod
 
 # Next, build the frontend assets within a node.js container
-FROM node:14.15-alpine as assets-builder
+FROM node:16.13-alpine as assets-builder
 
 WORKDIR /root
 ADD . .
