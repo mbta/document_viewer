@@ -36,10 +36,12 @@ COPY --from=assets-builder /root/priv/static ./priv/static
 RUN mix do compile --force, phx.digest, release
 
 # Finally, use an Alpine container for the runtime environment
-FROM alpine:3.13.1
+FROM alpine:3.15.4
 
 RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init \
   && rm -rf /var/cache/apk
+
+RUN apk upgrade --no-cache --update
 
 # Create non-root user
 RUN addgroup -S document_viewer && adduser -S -G document_viewer document_viewer
