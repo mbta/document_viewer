@@ -39,9 +39,8 @@ RUN mix do compile --force, phx.digest, release
 FROM alpine:3.15.4
 
 RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init \
+  && apk upgrade \
   && rm -rf /var/cache/apk
-
-RUN apk upgrade --no-cache --update
 
 # Create non-root user
 RUN addgroup -S document_viewer && adduser -S -G document_viewer document_viewer
