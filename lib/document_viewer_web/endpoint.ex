@@ -34,6 +34,8 @@ defmodule DocumentViewerWeb.Endpoint do
     plug Phoenix.CodeReloader
   end
 
+  plug Logster.Plugs.Logger
+
   plug Phoenix.LiveDashboard.RequestLogger,
     param_key: "request_logger",
     cookie_key: "request_logger"

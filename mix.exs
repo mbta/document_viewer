@@ -60,6 +60,7 @@ defmodule DocumentViewer.MixProject do
       {:guardian, "~> 2.1"},
       {:elixir_uuid, "~> 1.2"},
       {:oauth2, "~> 2.0"},
+      {:logster, "~> 1.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
