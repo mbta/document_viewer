@@ -1,5 +1,5 @@
 # First, get the elixir dependencies within an elixir container
-FROM hexpm/elixir:1.11.3-erlang-23.2.5-alpine-3.15.0 AS elixir-builder
+FROM hexpm/elixir:1.11.4-erlang-23.3.4.18-alpine-3.16.2 AS elixir-builder
 
 ENV LANG="C.UTF-8" MIX_ENV=prod
 
@@ -12,7 +12,7 @@ RUN mix local.hex --force && \
   mix do deps.get --only prod
 
 # Next, build the frontend assets within a node.js container
-FROM node:16.13-alpine as assets-builder
+FROM node:16.20-alpine as assets-builder
 
 WORKDIR /root
 ADD . .
