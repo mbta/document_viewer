@@ -13,7 +13,3 @@ Currently there is no mechanism to refresh the catalog if additional files are u
 ## Web Interface
 
 A web interface allows users to query against the in-memory catalog in order to find documents. The can view a file of interest in the browser or download it—in either case the document is stream out of S3. All user interactions are logged as an audit trail.
-
-## Document Upload API
-
-This application also supports a secondary purpose: it provides an API via which SimpliGov (a SAAS application used for Reduced Fares) can upload documents submitted by reduced fare program applicants for the purpose of backing those documents up in a location controlled by the MBTA. This is not directly related to the primary purpose of the DocumentViewer application, but the same team worked on both, so it was a straightforward and convenient place to provide that functionality.

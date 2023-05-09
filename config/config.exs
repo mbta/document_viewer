@@ -21,8 +21,7 @@ config :document_viewer,
   ],
   live_catalog?: true,
   redirect_http?: false,
-  cognito_group: "document-viewer",
-  upload_bucket: "mbta-ctd-reduced-fares-uploads"
+  cognito_group: "document-viewer"
 
 # Configures the endpoint
 config :document_viewer, DocumentViewerWeb.Endpoint,
