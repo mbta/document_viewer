@@ -17,10 +17,3 @@ config :ueberauth, Ueberauth.Strategy.Cognito,
   client_secret: System.get_env("COGNITO_CLIENT_SECRET"),
   user_pool_id: System.get_env("COGNITO_USER_POOL_ID"),
   aws_region: System.get_env("COGNITO_AWS_REGION")
-
-if tokens_str = System.get_env("API_AUTH_TOKENS") do
-  tokens = String.split(tokens_str, ",")
-
-  config :document_viewer,
-    api_auth_tokens: tokens
-end
