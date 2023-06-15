@@ -36,7 +36,7 @@ COPY --from=assets-builder /root/priv/static ./priv/static
 RUN mix do compile --force, phx.digest, release
 
 # Finally, use an Alpine container for the runtime environment
-FROM alpine:3.15.4
+FROM alpine:3.16.2
 
 RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init \
   && apk upgrade \
