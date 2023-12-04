@@ -55,7 +55,7 @@ defmodule DocumentViewer.MixProject do
       {:ex_aws_s3, "~> 2.0"},
       {:hackney, "~> 1.17"},
       {:sweet_xml, "~> 0.7.3"},
-      {:ueberauth, "~> 0.6.3"},
+      {:ueberauth, "~> 0.10.6"},
       {:ueberauth_cognito, "~> 0.2.0"},
       {:guardian, "~> 2.1"},
       {:oauth2, "~> 2.0"},
