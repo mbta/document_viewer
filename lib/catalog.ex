@@ -58,13 +58,13 @@ defmodule Catalog do
 
     Logger.info(fn -> "Loading document metadata" end)
 
-    {time_in_µs, _} = :timer.tc(&populate_ets_table/2, [ets, documents_fn])
+    {time_in_μs, _} = :timer.tc(&populate_ets_table/2, [ets, documents_fn])
 
     # Let the health server know that the data has finished loading
     Catalog.Health.loaded()
 
     Logger.info(fn ->
-      "Finished loading document metadata, time_in_ms=#{time_in_µs / 1_000}"
+      "Finished loading document metadata, time_in_ms=#{time_in_μs / 1_000}"
     end)
 
     {:noreply, state}
@@ -86,7 +86,7 @@ defmodule Catalog do
     {:reply, results, state}
   end
 
-  @spec populate_ets_table(:ets.tid(), (() -> [t()])) :: true
+  @spec populate_ets_table(:ets.tid(), (-> [t()])) :: true
   defp populate_ets_table(ets, documents_fn) do
     records =
       for document <- documents_fn.() do
