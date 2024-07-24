@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :document_viewer,
   live_catalog?: false
