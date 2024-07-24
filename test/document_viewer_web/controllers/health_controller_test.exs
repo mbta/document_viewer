@@ -16,6 +16,7 @@ defmodule DocumentViewerWeb.HealthControllerTest do
       assert response.status == 200
     end
 
+    @tag :capture_log
     test "returns 503 when health server is not ready", %{conn: conn} do
       {:ok, health_server_pid} = Health.start_link(name: :controller_ready_test)
 
