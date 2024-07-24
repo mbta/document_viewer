@@ -38,7 +38,7 @@ RUN mix do compile --force, phx.digest, release
 # Finally, use an Alpine container for the runtime environment
 FROM alpine:3.20.2
 
-RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init \
+RUN apk add --update libssl3 ncurses-libs bash curl dumb-init \
   && apk upgrade \
   && rm -rf /var/cache/apk
 
