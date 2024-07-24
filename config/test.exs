@@ -13,4 +13,4 @@ config :document_viewer, DocumentViewerWeb.Endpoint,
 config :document_viewer, DocumentViewerWeb.AuthManager, secret_key: "test key"
 
 # Print only warnings and errors during test
-config :logger, level: :warn
+config :logger, level: :warning
