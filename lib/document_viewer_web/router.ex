@@ -1,8 +1,10 @@
 defmodule DocumentViewerWeb.Router do
   use DocumentViewerWeb, :router
 
+  @redirect? Application.compile_env!(:document_viewer, :redirect_http?)
+
   pipeline :redirect_prod_http do
-    if Application.get_env(:document_viewer, :redirect_http?) do
+    if @redirect? do
       plug(Plug.SSL, rewrite_on: [:x_forwarded_proto])
     end
   end
