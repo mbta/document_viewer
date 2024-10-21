@@ -10,6 +10,7 @@ config :document_viewer, DocumentViewerWeb.Endpoint,
   http: [port: 4000],
   secret_key_base: "GQz2AbfSliQp6FYTncpcZJgM7skJdhKH6refgghsdE9gOz0TQ5u5+Er+tzH6XmUt",
   debug_errors: true,
+  live_catalog?: false,
   code_reloader: true,
   check_origin: false,
   watchers: [
