@@ -17,3 +17,25 @@ config :ueberauth, Ueberauth.Strategy.Cognito,
   client_secret: System.get_env("COGNITO_CLIENT_SECRET"),
   user_pool_id: System.get_env("COGNITO_USER_POOL_ID"),
   aws_region: System.get_env("COGNITO_AWS_REGION")
+
+if config_env() == :dev do
+  config(:document_viewer, live_catalog?: false)
+
+  config(:document_viewer, DocumentViewerWeb.Endpoint,
+    http: [port: 4000],
+    secret_key_base: "GQz2AbfSliQp6FYTncpcZJgM7skJdhKH6refgghsdE9gOz0TQ5u5+Er+tzH6XmUt",
+    debug_errors: true,
+    live_catalog?: false,
+    code_reloader: true,
+    check_origin: false,
+    watchers: [
+      node: [
+        "node_modules/webpack/bin/webpack.js",
+        "--mode",
+        "development",
+        "--watch-stdin",
+        cd: Path.expand("../assets", __DIR__)
+      ]
+    ]
+  )
+end
