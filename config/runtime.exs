@@ -39,3 +39,10 @@ if config_env() == :dev do
     ]
   )
 end
+
+if config_env() == :test do
+  config :document_viewer, DocumentViewerWeb.Endpoint,
+    http: [port: 4002],
+    secret_key_base: "GQz2AbfSliQp6FYTncpcZJgM7skJdhKH6refgghsdE9gOz0TQ5u5+Er+tzH6XmUt",
+    server: false
+end
