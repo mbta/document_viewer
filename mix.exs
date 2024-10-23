@@ -61,7 +61,7 @@ defmodule DocumentViewer.MixProject do
       {:oauth2, "~> 2.0"},
       {:logster, "~> 1.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
       {:lcov_ex, "~> 0.2", only: [:dev, :test], runtime: false}
     ]
