@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :document_viewer,
   redirect_http?: true

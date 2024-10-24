@@ -17,3 +17,14 @@ config :ueberauth, Ueberauth.Strategy.Cognito,
   client_secret: System.get_env("COGNITO_CLIENT_SECRET"),
   user_pool_id: System.get_env("COGNITO_USER_POOL_ID"),
   aws_region: System.get_env("COGNITO_AWS_REGION")
+
+if config_env() == :dev do
+  config(:document_viewer, DocumentViewerWeb.Endpoint,
+    secret_key_base: "GQz2AbfSliQp6FYTncpcZJgM7skJdhKH6refgghsdE9gOz0TQ5u5+Er+tzH6XmUt"
+  )
+end
+
+if config_env() == :test do
+  config :document_viewer, DocumentViewerWeb.Endpoint,
+    secret_key_base: "GQz2AbfSliQp6FYTncpcZJgM7skJdhKH6refgghsdE9gOz0TQ5u5+Er+tzH6XmUt"
+end
