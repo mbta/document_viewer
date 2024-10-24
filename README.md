@@ -4,6 +4,21 @@ Document Viewer is a web application allowing users with permission to view docu
 
 [![Build Status](https://github.com/mbta/document_viewer/actions/workflows/elixir.yml/badge.svg)](https://github.com/mbta/document_viewer/actions/workflows/elixir.yml)
 
+## Testing Docker
+
+On MBTA machines docker for desktop is [not allowed](https://github.com/mbta/technology-docs/blob/main/rfcs/accepted/0010-docker-desktop-replacement.md). Instead you must first install Colma:
+
+```sh
+brew install colima docker
+colima start
+``
+
+Then you can test building the docker container by:
+
+```sh
+docker build . -t document_viewer; docker run document_viewer
+```
+
 ## Development
 
 To start your Phoenix server:
