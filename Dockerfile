@@ -36,9 +36,9 @@ COPY --from=assets-builder /root/priv/static ./priv/static
 RUN mix do compile --force, phx.digest, release
 
 # Finally, use an Alpine container for the runtime environment
-FROM hexpm/elixir:1.17.3-erlang-27.1-alpine-3.19.4
+FROM alpine:3.19.4
 
-RUN apk add --update libstdc++6 libstdc++ libssl1.1 ncurses-libs bash curl dumb-init \
+RUN apk add --update libstdc++ ncurses-libs bash curl dumb-init \
   && apk upgrade \
   && rm -rf /var/cache/apk
 
