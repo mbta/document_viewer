@@ -21,11 +21,37 @@ docker build . -t document_viewer; docker run document_viewer
 
 ## Development
 
-To start your Phoenix server:
+install deps
+```sh
+asdf install && mix deps.get
+```
 
-- Install asdf tools with `asdf install`
-- Install dependencies with `mix deps.get`
-- Install Node.js dependencies with `npm install` inside the `assets` directory
-- Start Phoenix endpoint with `mix phx.server`
+Likely you do not have the permissions to access the S3 bucket that this app connects to. That is deliberate. It houses very sensitive documents so the access to it is very locked down. If you start the app you may see an error like this:
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+```sh
+[error] GenServer Catalog terminating
+** (ArgumentError) errors were found at the given arguments:
+
+  * 1st argument: the table identifier does not refer to an existing ETS table
+
+    (stdlib 6.1.1) :ets.lookup(ExAws.Config.AuthCache, :aws_instance_auth)
+    (ex_aws 2.5.3) lib/ex_aws/config/auth_cache.ex:23: ExAws.Config.AuthCache.get/1
+    (ex_aws 2.5.3) lib/ex_aws/config.ex:179: ExAws.Config.retrieve_runtime_value/2
+```
+
+We have not yet setup a mock for the bucket in dev or setup a dev bucket to work from.
+
+## Deploying
+
+### Staging
+
+The staging URL is [https://document-viewer-dev.mbtace.com](https://document-viewer-dev.mbtace.com).
+
+If you do not have the correct permissions this may redirect back to `https://www.mbta.com/`. See [here](https://github.com/mbta/document_viewer/blob/main/lib/document_viewer_web/ensure_document_viewer_group.ex)
+
+Merging to main deploys to the staging env automatically. There is also an action you can follow and trigger manually [here](https://github.com/mbta/document_viewer/actions/workflows/deploy-dev.yml).
+
+### Prod
+
+There is a github action for a prod deploy which can be found [here](https://github.com/mbta/document_viewer/actions/workflows/deploy-prod.yml)
+
