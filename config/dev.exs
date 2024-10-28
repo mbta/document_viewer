@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -10,14 +10,15 @@ config :document_viewer, DocumentViewerWeb.Endpoint,
   http: [port: 4000],
   secret_key_base: "GQz2AbfSliQp6FYTncpcZJgM7skJdhKH6refgghsdE9gOz0TQ5u5+Er+tzH6XmUt",
   debug_errors: true,
+  live_catalog?: false,
   code_reloader: true,
   check_origin: false,
   watchers: [
     node: [
       "node_modules/webpack/bin/webpack.js",
+      "watch",
       "--mode",
       "development",
-      "--watch-stdin",
       cd: Path.expand("../assets", __DIR__)
     ]
   ]

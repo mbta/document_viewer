@@ -4,8 +4,10 @@ if host = System.get_env("HOST") do
   config :document_viewer, DocumentViewerWeb.Endpoint, url: [host: host, port: 80]
 end
 
-config :document_viewer, DocumentViewerWeb.Endpoint,
-  secret_key_base: System.get_env("SECRET_KEY_BASE")
+if config_env() == :prod do
+  config :document_viewer, DocumentViewerWeb.Endpoint,
+    secret_key_base: System.get_env("SECRET_KEY_BASE")
+end
 
 if guardian_secret_key = System.get_env("GUARDIAN_SECRET_KEY") do
   config :document_viewer, DocumentViewerWeb.AuthManager, secret_key: guardian_secret_key
