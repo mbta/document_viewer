@@ -16,6 +16,7 @@ defmodule DocumentViewerWeb do
   below. Instead, define any helper function in modules
   and import those modules here.
   """
+  def static_paths, do: ~w(css fonts images js favicon.ico robots.txt)
 
   def controller do
     quote do
@@ -23,7 +24,7 @@ defmodule DocumentViewerWeb do
 
       import Plug.Conn
       import DocumentViewerWeb.Gettext
-      alias DocumentViewerWeb.Router.Helpers, as: Routes
+      unquote(verified_routes())
     end
   end
 
@@ -69,6 +70,16 @@ defmodule DocumentViewerWeb do
       import DocumentViewerWeb.ErrorHelpers
       import DocumentViewerWeb.Gettext
       alias DocumentViewerWeb.Router.Helpers, as: Routes
+      unquote(verified_routes())
+    end
+  end
+
+  def verified_routes do
+    quote do
+      use Phoenix.VerifiedRoutes,
+        endpoint: DocumentViewerWeb.Endpoint,
+        router: DocumentViewerWeb.Router,
+        statics: DocumentViewerWeb.static_paths()
     end
   end
 

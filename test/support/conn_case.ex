@@ -25,9 +25,9 @@ defmodule DocumentViewerWeb.ConnCase do
       import DocumentViewerWeb.ConnCase
 
       alias DocumentViewerWeb.Router.Helpers, as: Routes
-
       # The default endpoint for testing
       @endpoint DocumentViewerWeb.Endpoint
+      use DocumentViewerWeb, :verified_routes
     end
   end
 

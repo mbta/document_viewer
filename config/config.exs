@@ -42,10 +42,10 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Placeholder for Cognito authentication, defined for real in environment configs
+# Placeholder for Keycloak authentication, defined for real in environment configs
 config :ueberauth, Ueberauth,
   providers: [
-    cognito: {DocumentViewerWeb.Ueberauth.Strategy.Fake, []}
+    keycloak: {DocumentViewerWeb.Ueberauth.Strategy.Fake, []}
   ]
 
 # Import environment specific config. This must remain at the bottom

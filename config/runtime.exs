@@ -9,13 +9,22 @@ if config_env() == :prod do
     secret_key_base: System.get_env("SECRET_KEY_BASE")
 end
 
+keycloak_opts = [
+  client_id: System.fetch_env!("KEYCLOAK_CLIENT_ID"),
+  client_secret: System.fetch_env!("KEYCLOAK_CLIENT_SECRET")
+]
+
+config(:ueberauth_oidcc,
+  issuers: [%{name: :keycloak_issuer, issuer: System.fetch_env!("KEYCLOAK_ISSUER")}],
+  providers: [keycloak: keycloak_opts]
+)
+
+config(:ueberauth, Ueberauth,
+  keycloak:
+    {Ueberauth.Strategy.Oidcc,
+     issuer: :keycloak_issuer, userinfo: true, uid_field: "email", scopes: ~w(openid email)}
+)
+
 if guardian_secret_key = System.get_env("GUARDIAN_SECRET_KEY") do
   config :document_viewer, DocumentViewerWeb.AuthManager, secret_key: guardian_secret_key
 end
-
-config :ueberauth, Ueberauth.Strategy.Cognito,
-  auth_domain: System.get_env("COGNITO_DOMAIN"),
-  client_id: System.get_env("COGNITO_CLIENT_ID"),
-  client_secret: System.get_env("COGNITO_CLIENT_SECRET"),
-  user_pool_id: System.get_env("COGNITO_USER_POOL_ID"),
-  aws_region: System.get_env("COGNITO_AWS_REGION")

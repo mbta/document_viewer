@@ -14,9 +14,8 @@ defmodule DocumentViewerWeb.AuthControllerTest do
 
   describe "GET /auth/:provider" do
     test "redirects to the callback", %{conn: conn} do
-      conn = get(conn, "/auth/cognito")
-
-      assert redirected_to(conn) == "/auth/cognito/callback"
+      conn = get(conn, "/auth/keycloak")
+      assert redirected_to(conn) == "/auth/keycloak/callback"
     end
   end
 
@@ -30,7 +29,7 @@ defmodule DocumentViewerWeb.AuthControllerTest do
       conn =
         conn
         |> assign(:ueberauth_auth, @mock_auth)
-        |> get("/auth/cognito/callback")
+        |> get("/auth/keycloak/callback")
 
       assert redirected_to(conn) == "/"
       assert Guardian.Plug.current_claims(conn)["groups"] == ["test-group"]
@@ -41,7 +40,7 @@ defmodule DocumentViewerWeb.AuthControllerTest do
         capture_log(fn ->
           conn
           |> assign(:ueberauth_auth, @mock_auth)
-          |> get("/auth/cognito/callback")
+          |> get("/auth/keycloak/callback")
         end)
 
       assert log =~ "username=\"test@mbta.com\""
@@ -56,7 +55,7 @@ defmodule DocumentViewerWeb.AuthControllerTest do
         |> assign(:ueberauth_failure, %Ueberauth.Failure{
           errors: [%Ueberauth.Failure.Error{message: "failed"}]
         })
-        |> get("/auth/cognito/callback")
+        |> get("/auth/keycloak/callback")
 
       assert redirected_to(conn) == "https://www.mbta.com"
     end
@@ -69,7 +68,7 @@ defmodule DocumentViewerWeb.AuthControllerTest do
           |> assign(:ueberauth_failure, %Ueberauth.Failure{
             errors: [%Ueberauth.Failure.Error{message: "failed"}]
           })
-          |> get("/auth/cognito/callback")
+          |> get("/auth/keycloak/callback")
         end)
 
       assert log =~ "Ueberauth error: failed"
