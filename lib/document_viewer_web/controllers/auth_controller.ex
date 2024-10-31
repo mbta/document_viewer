@@ -50,19 +50,21 @@ defmodule DocumentViewerWeb.AuthController do
       |> redirect(to: ~p"/")
     else
       log_errors("Document viewer role not found in the roles for user: #{roles}")
-      redirect(conn)
+      redirect_to_my_charlie(conn)
     end
   end
 
   def callback(%{assigns: %{ueberauth_failure: ueberauth_failure}} = conn, _params) do
+    ueberauth_failure |> IO.inspect(limit: :infinity, label: "FAIL")
+
     log_errors(ueberauth_failure)
-    redirect(conn)
+    redirect_to_my_charlie(conn)
   end
 
   # If a user gets a failure from Ueberauth, we want to redirect them away from this site.
   # Since everything on this site requires authorization, they will get trapped
   # in an infinite loop of redirects otherwise.
-  defp redirect(conn) do
+  defp redirect_to_my_charlie(conn) do
     conn
     |> Guardian.Plug.sign_out(AuthManager, [])
     |> redirect(external: "https://www.mbta.com")

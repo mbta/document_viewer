@@ -9,8 +9,8 @@ defmodule DocumentViewerWeb.Ueberauth.Strategy.FakeTest do
              token: "fake_access_token",
              refresh_token: "fake_refresh_token",
              expires: true,
-             expires_at: System.system_time(:second) + 60 * 60,
-             other: %{groups: ["document-viewer"]}
+             expires_at: System.system_time(:second) + 60 * 60
+             # other: %{groups: ["document-viewer"]}
            }
   end
 

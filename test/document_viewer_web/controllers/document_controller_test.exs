@@ -30,13 +30,13 @@ defmodule DocumentViewerWeb.DocumentControllerTest do
       assert log =~ "file_path=\"FILE.pdf\""
     end
 
-    test "unauthenticated, redirects you to cognito auth", %{conn: conn} do
+    test "unauthenticated, redirects you to keycloak auth", %{conn: conn} do
       conn = get(conn, "/documents/BUCKET/FILE.pdf")
 
-      assert redirected_to(conn) == "/auth/cognito"
+      assert redirected_to(conn) == "/auth/keycloak"
     end
 
-    @tag :authenticated_not_in_group
+    @tag :authenticated_no_valid_role
     test "authenticated not in document-viewer group, redirects you to mbta.com", %{
       conn: conn
     } do
@@ -92,13 +92,13 @@ defmodule DocumentViewerWeb.DocumentControllerTest do
       assert log =~ "file_path=\"FILE.pdf\""
     end
 
-    test "unauthenticated, redirects you to cognito auth", %{conn: conn} do
+    test "unauthenticated, redirects you to keycloak auth", %{conn: conn} do
       conn = get(conn, "/documents/BUCKET/FILE.pdf/pdf")
 
-      assert redirected_to(conn) == "/auth/cognito"
+      assert redirected_to(conn) == "/auth/keycloak"
     end
 
-    @tag :authenticated_not_in_group
+    @tag :authenticated_no_valid_role
     test "authenticated not in document-viewer group, redirects you to mbta.com", %{
       conn: conn
     } do

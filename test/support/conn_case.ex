@@ -36,26 +36,26 @@ defmodule DocumentViewerWeb.ConnCase do
       cond do
         tags[:authenticated] ->
           user = "test_user"
-          document_viewer_group = Application.get_env(:document_viewer, :cognito_group)
 
           conn =
             Phoenix.ConnTest.build_conn()
             |> Plug.Test.init_test_session(%{})
             |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{
-              groups: [document_viewer_group]
+              roles: [DocumentViewerWeb.AuthController.document_viewer_role()]
             })
             |> Plug.Conn.put_session(:username, user)
 
           {conn, user}
 
-        tags[:authenticated_not_in_group] ->
+        tags[:authenticated_no_valid_role] ->
           user = "test_user"
 
           conn =
             Phoenix.ConnTest.build_conn()
             |> Plug.Test.init_test_session(%{})
-            |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{groups: []})
+            |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{roles: []})
             |> Plug.Conn.put_session(:username, user)
+            |> IO.inspect(limit: :infinity, label: "???????")
 
           {conn, user}
 

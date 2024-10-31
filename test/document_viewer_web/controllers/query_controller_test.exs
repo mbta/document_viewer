@@ -10,13 +10,13 @@ defmodule DocumentViewerWeb.QueryControllerTest do
       assert html_response(conn, 200) =~ "Find Documents"
     end
 
-    test "unauthenticated, redirects you to cognito auth", %{conn: conn} do
+    test "unauthenticated, redirects you to keycloak auth", %{conn: conn} do
       conn = get(conn, "/")
 
-      assert redirected_to(conn) == "/auth/cognito"
+      assert redirected_to(conn) == "/auth/keycloak"
     end
 
-    @tag :authenticated_not_in_group
+    @tag :authenticated_no_valid_role
     test "authenticated not in document-viewer group, redirects you to mbta.com", %{
       conn: conn
     } do
@@ -69,19 +69,15 @@ defmodule DocumentViewerWeb.QueryControllerTest do
     end
 
     @tag capture_log: true
-    test "unauthenticated, redirects you to cognito auth", %{conn: conn} do
+    test "unauthenticated, redirects you to keycloak auth", %{conn: conn} do
       conn = post(conn, "/", %{"query" => %{"last_name" => "Ng"}})
 
-      assert redirected_to(conn) == "/auth/cognito"
+      assert redirected_to(conn) == "/auth/keycloak"
     end
 
-    @tag :authenticated_not_in_group
     @tag capture_log: true
-    test "authenticated not in document-viewer group, redirects you to mbta.com", %{
-      conn: conn
-    } do
+    test "authenticated not in document-viewer group, redirects you to mbta.com", %{conn: conn} do
       conn = post(conn, "/", %{"query" => %{"last_name" => "Ng"}})
-
       assert redirected_to(conn) == "https://www.mbta.com"
     end
   end
