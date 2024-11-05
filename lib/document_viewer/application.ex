@@ -11,8 +11,7 @@ defmodule DocumentViewer.Application do
       DocumentViewerWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: DocumentViewer.PubSub},
-      # commenting out so I can start the app or attempt to.
-      # Catalog.Supervisor,
+      Catalog.Supervisor,
       # Start the Endpoint (http/https)
       DocumentViewerWeb.Endpoint
       # Start a worker by calling: DocumentViewer.Worker.start_link(arg)
