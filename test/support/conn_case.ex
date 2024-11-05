@@ -46,22 +46,20 @@ defmodule DocumentViewerWeb.ConnCase do
 
   setup tags do
     {conn, user} =
-      cond do
-        tags[:authenticated] ->
-          user = "test_user"
+      if tags[:authenticated] do
+        user = "test_user"
 
-          conn =
-            Phoenix.ConnTest.build_conn()
-            |> Plug.Test.init_test_session(%{})
-            |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{
-              roles: [DocumentViewerWeb.AuthController.document_viewer_role()]
-            })
-            |> Plug.Conn.put_session(:username, user)
+        conn =
+          Phoenix.ConnTest.build_conn()
+          |> Plug.Test.init_test_session(%{})
+          |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{
+            roles: [DocumentViewerWeb.AuthController.document_viewer_role()]
+          })
+          |> Plug.Conn.put_session(:username, user)
 
-          {conn, user}
-
-        true ->
-          {Phoenix.ConnTest.build_conn(), nil}
+        {conn, user}
+      else
+        {Phoenix.ConnTest.build_conn(), nil}
       end
 
     {:ok, %{conn: conn, user: user}}

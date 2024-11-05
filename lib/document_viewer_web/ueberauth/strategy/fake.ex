@@ -4,6 +4,7 @@ defmodule DocumentViewerWeb.Ueberauth.Strategy.Fake do
   """
   use DocumentViewerWeb, :verified_routes
   use Ueberauth.Strategy
+  alias Ueberauth.Strategy.Helpers
 
   @impl Ueberauth.Strategy
 
@@ -18,7 +19,7 @@ defmodule DocumentViewerWeb.Ueberauth.Strategy.Fake do
   See authenticated_no_valid_role/1 in DocumentViewerWeb.ConnCase for more.
   """
   def handle_request!(%{params: %{"user_type" => "no_valid_role"}} = conn) do
-    params = Ueberauth.Strategy.Helpers.with_state_param([], conn)
+    params = Helpers.with_state_param([], conn)
 
     conn
     |> redirect!(~p"/auth/keycloak/callback?#{params}&user_type=no_valid_role")
@@ -38,7 +39,7 @@ defmodule DocumentViewerWeb.Ueberauth.Strategy.Fake do
     #   > cookie used to authenticate the user-agent).  The client SHOULD
     #   > utilize the "state" request parameter to deliver this value to the
     #   > authorization server when making an authorization request.
-    params = Ueberauth.Strategy.Helpers.with_state_param([], conn)
+    params = Helpers.with_state_param([], conn)
 
     conn
     |> redirect!(~p"/auth/keycloak/callback?#{params}")

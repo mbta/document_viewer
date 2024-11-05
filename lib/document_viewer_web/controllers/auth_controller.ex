@@ -3,7 +3,7 @@ defmodule DocumentViewerWeb.AuthController do
 
   require Logger
   @document_viewer_role "document-viewer-admin"
-  def document_viewer_role(), do: @document_viewer_role
+  def document_viewer_role, do: @document_viewer_role
 
   # This handles implements the request/2 function that Plug will call. That implementation
   # will create a valid Keycloak request and ensure that callback/2 below gets called when
