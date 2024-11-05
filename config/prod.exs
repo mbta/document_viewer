@@ -21,12 +21,6 @@ config :document_viewer, DocumentViewerWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
-# Configure Ueberauth to use Cognito
-config :ueberauth, Ueberauth,
-  providers: [
-    cognito: {Ueberauth.Strategy.Cognito, []}
-  ]
-
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
@@ -60,3 +54,11 @@ config :ueberauth, Ueberauth,
 #       force_ssl: [hsts: true]
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
+
+config(:ueberauth, Ueberauth,
+  providers: [
+    keycloak:
+      {Ueberauth.Strategy.Oidcc,
+       issuer: :keycloak_issuer, userinfo: true, uid_field: "email", scopes: ~w(openid email)}
+  ]
+)

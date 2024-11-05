@@ -1,5 +1,6 @@
 defmodule DocumentViewerWeb.DocumentControllerTest do
-  use DocumentViewerWeb.ConnCase
+  # We re-assign log level so this has to by synchronous.
+  use DocumentViewerWeb.ConnCase, async: false
   import ExUnit.CaptureLog
   import Test.Support.Helpers
 
@@ -30,19 +31,27 @@ defmodule DocumentViewerWeb.DocumentControllerTest do
       assert log =~ "file_path=\"FILE.pdf\""
     end
 
-    test "unauthenticated, redirects you to cognito auth", %{conn: conn} do
+    test "unauthenticated, redirects you to keycloak auth", %{conn: conn} do
       conn = get(conn, "/documents/BUCKET/FILE.pdf")
-
-      assert redirected_to(conn) == "/auth/cognito"
+      assert redirected_to(conn) == "/auth/keycloak"
     end
 
-    @tag :authenticated_not_in_group
     test "authenticated not in document-viewer group, redirects you to mbta.com", %{
       conn: conn
     } do
-      conn = get(conn, "/documents/BUCKET/FILE.pdf")
+      # If you attempt to sign in without the correct role the sign in fails. Which means
+      # if you then attempt to go to a route that requires sign in, you will be redirected
+      # back to the log in route.
+      log =
+        capture_log(fn ->
+          # This is defined in the `__using__` from `use DocumentViewerWeb.ConnCase`
+          conn = authenticated_no_valid_role(conn)
+          assert redirected_to(conn) == "https://www.mbta.com"
+          conn = get(conn, "/documents/BUCKET/FILE.pdf")
+          assert redirected_to(conn) == "/auth/keycloak"
+        end)
 
-      assert redirected_to(conn) == "https://www.mbta.com"
+      assert log =~ "[warning] Document viewer role not found in the roles for user: admin"
     end
   end
 
@@ -92,19 +101,26 @@ defmodule DocumentViewerWeb.DocumentControllerTest do
       assert log =~ "file_path=\"FILE.pdf\""
     end
 
-    test "unauthenticated, redirects you to cognito auth", %{conn: conn} do
+    test "unauthenticated, redirects you to keycloak auth", %{conn: conn} do
       conn = get(conn, "/documents/BUCKET/FILE.pdf/pdf")
 
-      assert redirected_to(conn) == "/auth/cognito"
+      assert redirected_to(conn) == "/auth/keycloak"
     end
 
-    @tag :authenticated_not_in_group
     test "authenticated not in document-viewer group, redirects you to mbta.com", %{
       conn: conn
     } do
-      conn = get(conn, "/documents/BUCKET/FILE.pdf/pdf")
+      log =
+        capture_log(fn ->
+          # This is defined in the `__using__` from `use DocumentViewerWeb.ConnCase`
+          conn = authenticated_no_valid_role(conn)
+          assert redirected_to(conn) == "https://www.mbta.com"
 
-      assert redirected_to(conn) == "https://www.mbta.com"
+          conn = get(conn, "/documents/BUCKET/FILE.pdf/pdf")
+          assert redirected_to(conn) == "/auth/keycloak"
+        end)
+
+      assert log =~ "[warning] Document viewer role not found in the roles for user: admin"
     end
   end
 end

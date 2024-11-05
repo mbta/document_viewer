@@ -9,8 +9,7 @@ defmodule DocumentViewerWeb.Ueberauth.Strategy.FakeTest do
              token: "fake_access_token",
              refresh_token: "fake_refresh_token",
              expires: true,
-             expires_at: System.system_time(:second) + 60 * 60,
-             other: %{groups: ["document-viewer"]}
+             expires_at: System.system_time(:second) + 60 * 60
            }
   end
 
@@ -18,7 +17,18 @@ defmodule DocumentViewerWeb.Ueberauth.Strategy.FakeTest do
     assert Fake.info(%{}) == %Info{}
   end
 
-  test "extra returns an Extra struct with empty raw_info" do
-    assert Fake.extra(%{}) == %Extra{raw_info: %{}}
+  test "extra returns an Extra struct with expected roles" do
+    assert Fake.extra(%{}) == %Extra{
+             raw_info: %{
+               claims: %{"aud" => "fake_aud"},
+               userinfo: %{
+                 "resource_access" => %{
+                   "fake_aud" => %{
+                     "roles" => ["document-viewer-admin"]
+                   }
+                 }
+               }
+             }
+           }
   end
 end

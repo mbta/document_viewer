@@ -38,7 +38,7 @@ RUN mix do compile --force, phx.digest, release
 # Finally, use an Alpine container for the runtime environment
 FROM alpine:3.19.4
 
-RUN apk add --update libstdc++ ncurses-libs bash curl dumb-init \
+RUN apk add --update libstdc++ ncurses-libs bash curl dumb-init ca-certificates \
   && apk upgrade \
   && rm -rf /var/cache/apk
 

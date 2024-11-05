@@ -9,16 +9,8 @@ defmodule DocumentViewerWeb.Router do
     end
   end
 
-  pipeline :auth do
-    plug DocumentViewerWeb.AuthManager.Pipeline
-  end
-
-  pipeline :ensure_auth do
-    plug Guardian.Plug.EnsureAuthenticated
-  end
-
-  pipeline :ensure_document_viewer_group do
-    plug DocumentViewerWeb.EnsureDocumentViewerGroup
+  pipeline :authenticate do
+    plug(DocumentViewerWeb.AuthManager.Pipeline)
   end
 
   pipeline :browser do
@@ -36,18 +28,15 @@ defmodule DocumentViewerWeb.Router do
   scope "/auth", DocumentViewerWeb do
     pipe_through([:redirect_prod_http, :browser])
 
+    # We use Uberauth and UeberauthOidcc to handle SSO in keycloak. That takes care of
+    # creating a valid request to keycloak when signing in and parsing the response when
+    # the user is redirected back.
     get("/:provider", AuthController, :request)
     get("/:provider/callback", AuthController, :callback)
   end
 
   scope "/", DocumentViewerWeb do
-    pipe_through [
-      :redirect_prod_http,
-      :browser,
-      :auth,
-      :ensure_auth,
-      :ensure_document_viewer_group
-    ]
+    pipe_through [:redirect_prod_http, :browser, :authenticate]
 
     get("/", QueryController, :new)
     post("/", QueryController, :search)

@@ -25,42 +25,41 @@ defmodule DocumentViewerWeb.ConnCase do
       import DocumentViewerWeb.ConnCase
 
       alias DocumentViewerWeb.Router.Helpers, as: Routes
-
       # The default endpoint for testing
       @endpoint DocumentViewerWeb.Endpoint
+      use DocumentViewerWeb, :verified_routes
+
+      @doc """
+      Function that logs in as a user without a correct role. Ideally we could just use a
+      different fake strategy but ueberauth does not provide a good way of swapping them
+      out on a per test basis. So instead we are hacking in this.
+      """
+      def authenticated_no_valid_role(conn) do
+        # This username is detected in our fake ueberauth strategy and returns a user
+        # without the valid roles.
+        conn = conn |> Phoenix.ConnTest.get("/auth/keycloak?user_type=no_valid_role")
+        path = conn |> Phoenix.ConnTest.redirected_to()
+        conn |> Phoenix.ConnTest.get(path)
+      end
     end
   end
 
   setup tags do
     {conn, user} =
-      cond do
-        tags[:authenticated] ->
-          user = "test_user"
-          document_viewer_group = Application.get_env(:document_viewer, :cognito_group)
+      if tags[:authenticated] do
+        user = "test_user"
 
-          conn =
-            Phoenix.ConnTest.build_conn()
-            |> Plug.Test.init_test_session(%{})
-            |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{
-              groups: [document_viewer_group]
-            })
-            |> Plug.Conn.put_session(:username, user)
+        conn =
+          Phoenix.ConnTest.build_conn()
+          |> Plug.Test.init_test_session(%{})
+          |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{
+            roles: [DocumentViewerWeb.AuthController.document_viewer_role()]
+          })
+          |> Plug.Conn.put_session(:username, user)
 
-          {conn, user}
-
-        tags[:authenticated_not_in_group] ->
-          user = "test_user"
-
-          conn =
-            Phoenix.ConnTest.build_conn()
-            |> Plug.Test.init_test_session(%{})
-            |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{groups: []})
-            |> Plug.Conn.put_session(:username, user)
-
-          {conn, user}
-
-        true ->
-          {Phoenix.ConnTest.build_conn(), nil}
+        {conn, user}
+      else
+        {Phoenix.ConnTest.build_conn(), nil}
       end
 
     {:ok, %{conn: conn, user: user}}
