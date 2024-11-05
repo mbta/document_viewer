@@ -17,12 +17,6 @@ if config_env() == :prod do
     issuers: [%{name: :keycloak_issuer, issuer: System.fetch_env!("KEYCLOAK_ISSUER")}],
     providers: [keycloak: keycloak_opts]
   )
-
-  config(:ueberauth, Ueberauth,
-    keycloak:
-      {Ueberauth.Strategy.Oidcc,
-       issuer: :keycloak_issuer, userinfo: true, uid_field: "email", scopes: ~w(openid email)}
-  )
 end
 
 if guardian_secret_key = System.get_env("GUARDIAN_SECRET_KEY") do

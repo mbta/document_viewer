@@ -13,14 +13,6 @@ defmodule DocumentViewerWeb.AuthController do
   alias DocumentViewerWeb.AuthManager
   alias DocumentViewerWeb.UserActionLogger
 
-  def request(conn, %{"provider" => provider}) when provider != "keycloak" do
-    send_resp(conn, 404, "Not Found")
-  end
-
-  def callback(conn, %{"provider" => provider}) when provider != "keycloak" do
-    send_resp(conn, 404, "Not Found")
-  end
-
   @doc """
   This is called when a user returns from logging in. They'll return with information that
   Ueberauth extracts from the request and puts into assigns for us, which we can then use
@@ -29,7 +21,12 @@ defmodule DocumentViewerWeb.AuthController do
   def callback(
         %{
           assigns: %{
-            ueberauth_auth: %Ueberauth.Auth{uid: username, credentials: credentials, extra: extra}
+            ueberauth_auth: %Ueberauth.Auth{
+              uid: username,
+              credentials: credentials,
+              extra: extra,
+              provider: :keycloak
+            }
           }
         } = conn,
         _params
@@ -49,22 +46,20 @@ defmodule DocumentViewerWeb.AuthController do
       |> Plug.Conn.put_session(:username, username)
       |> redirect(to: ~p"/")
     else
-      log_errors("Document viewer role not found in the roles for user: #{roles}")
-      redirect_to_my_charlie(conn)
+      Logger.warning("Document viewer role not found in the roles for user: #{roles}")
+      redirect_to_dotcom(conn)
     end
   end
 
   def callback(%{assigns: %{ueberauth_failure: ueberauth_failure}} = conn, _params) do
-    ueberauth_failure |> IO.inspect(limit: :infinity, label: "FAIL")
-
     log_errors(ueberauth_failure)
-    redirect_to_my_charlie(conn)
+    redirect_to_dotcom(conn)
   end
 
   # If a user gets a failure from Ueberauth, we want to redirect them away from this site.
   # Since everything on this site requires authorization, they will get trapped
   # in an infinite loop of redirects otherwise.
-  defp redirect_to_my_charlie(conn) do
+  defp redirect_to_dotcom(conn) do
     conn
     |> Guardian.Plug.sign_out(AuthManager, [])
     |> redirect(external: "https://www.mbta.com")

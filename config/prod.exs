@@ -54,3 +54,11 @@ config :logger, level: :info
 #       force_ssl: [hsts: true]
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
+
+config(:ueberauth, Ueberauth,
+  providers: [
+    keycloak:
+      {Ueberauth.Strategy.Oidcc,
+       issuer: :keycloak_issuer, userinfo: true, uid_field: "email", scopes: ~w(openid email)}
+  ]
+)
