@@ -55,3 +55,6 @@ Merging to main deploys to the staging env automatically. There is also an actio
 
 There is a github action for a prod deploy which can be found [here](https://github.com/mbta/document_viewer/actions/workflows/deploy-prod.yml)
 
+## User Roles and Permissions
+
+Details can be found [here](https://www.notion.so/mbta-downtown-crossing/Document-viewer-Roles-Groups-Users-130f5d8d11ea80c8b99bc40ed995171a)
