@@ -6,6 +6,25 @@ defmodule DocumentViewerWeb.Ueberauth.Strategy.Fake do
   use Ueberauth.Strategy
 
   @impl Ueberauth.Strategy
+
+  @doc """
+  We want to be able to test different responses from keycloak. In order to do that we need
+  this fake strategy to return different things in different tests. Unfortunately Ueberauth
+  doesn't provide a great way to do that so we are hacking our way into that by providing
+  query params that do different things when detected. You may use the following:
+
+    user_type=no_valid_role - this will return a user without the correct roles.
+
+  See authenticated_no_valid_role/1 in DocumentViewerWeb.ConnCase for more.
+  """
+  def handle_request!(%{params: %{"user_type" => "no_valid_role"}} = conn) do
+    params = Ueberauth.Strategy.Helpers.with_state_param([], conn)
+
+    conn
+    |> redirect!(~p"/auth/keycloak/callback?#{params}&user_type=no_valid_role")
+    |> halt()
+  end
+
   def handle_request!(conn) do
     # Ueberauth does a thing to check for CSRF attacks. It essentially adds a state param
     # that gets checked by ueberauth. This ensures we add it correctly in this fake strategy.
@@ -27,11 +46,13 @@ defmodule DocumentViewerWeb.Ueberauth.Strategy.Fake do
   end
 
   @impl Ueberauth.Strategy
-  def handle_callback!(conn) do
-    conn
-  end
+  def handle_callback!(conn), do: conn
 
   @impl Ueberauth.Strategy
+  def uid(%{params: %{"user_type" => username}}) do
+    username
+  end
+
   def uid(_conn) do
     "fake_uid"
   end
@@ -49,6 +70,20 @@ defmodule DocumentViewerWeb.Ueberauth.Strategy.Fake do
   @impl Ueberauth.Strategy
   def info(_conn) do
     %Ueberauth.Auth.Info{}
+  end
+
+  @impl Ueberauth.Strategy
+  def extra(%{params: %{"user_type" => "no_valid_role"}}) do
+    %Ueberauth.Auth.Extra{
+      raw_info: %{
+        claims: %{"aud" => "fake_aud"},
+        userinfo: %{
+          "resource_access" => %{
+            "fake_aud" => %{"roles" => ["admin"]}
+          }
+        }
+      }
+    }
   end
 
   @impl Ueberauth.Strategy

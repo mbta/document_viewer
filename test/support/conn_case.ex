@@ -28,6 +28,19 @@ defmodule DocumentViewerWeb.ConnCase do
       # The default endpoint for testing
       @endpoint DocumentViewerWeb.Endpoint
       use DocumentViewerWeb, :verified_routes
+
+      @doc """
+      Function that logs in as a user without a correct role. Ideally we could just use a
+      different fake strategy but ueberauth does not provide a good way of swapping them
+      out on a per test basis. So instead we are hacking in this.
+      """
+      def authenticated_no_valid_role(conn) do
+        # This username is detected in our fake ueberauth strategy and returns a user
+        # without the valid roles.
+        conn = conn |> Phoenix.ConnTest.get("/auth/keycloak?user_type=no_valid_role")
+        path = conn |> Phoenix.ConnTest.redirected_to()
+        conn |> Phoenix.ConnTest.get(path)
+      end
     end
   end
 
@@ -44,18 +57,6 @@ defmodule DocumentViewerWeb.ConnCase do
               roles: [DocumentViewerWeb.AuthController.document_viewer_role()]
             })
             |> Plug.Conn.put_session(:username, user)
-
-          {conn, user}
-
-        tags[:authenticated_no_valid_role] ->
-          user = "test_user"
-
-          conn =
-            Phoenix.ConnTest.build_conn()
-            |> Plug.Test.init_test_session(%{})
-            |> Guardian.Plug.sign_in(DocumentViewerWeb.AuthManager, user, %{roles: []})
-            |> Plug.Conn.put_session(:username, user)
-            |> IO.inspect(limit: :infinity, label: "???????")
 
           {conn, user}
 

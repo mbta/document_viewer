@@ -38,6 +38,7 @@ defmodule DocumentViewerWeb.AuthController do
     roles = extra.raw_info.userinfo["resource_access"][client_id]["roles"] || []
 
     UserActionLogger.log(username, :login)
+
     time_left = expiration - current_time
 
     if @document_viewer_role in roles do

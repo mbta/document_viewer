@@ -16,13 +16,20 @@ defmodule DocumentViewerWeb.QueryControllerTest do
       assert redirected_to(conn) == "/auth/keycloak"
     end
 
-    @tag :authenticated_no_valid_role
     test "authenticated not in document-viewer group, redirects you to mbta.com", %{
       conn: conn
     } do
-      conn = get(conn, "/")
+      log =
+        capture_log(fn ->
+          # This is defined in the `__using__` from `use DocumentViewerWeb.ConnCase`
+          conn = authenticated_no_valid_role(conn)
+          assert redirected_to(conn) == "https://www.mbta.com"
 
-      assert redirected_to(conn) == "https://www.mbta.com"
+          conn = get(conn, "/")
+          assert redirected_to(conn) == "/auth/keycloak"
+        end)
+
+      assert log =~ "[warning] Document viewer role not found in the roles for user: admin"
     end
   end
 
@@ -75,10 +82,18 @@ defmodule DocumentViewerWeb.QueryControllerTest do
       assert redirected_to(conn) == "/auth/keycloak"
     end
 
-    @tag capture_log: true
     test "authenticated not in document-viewer group, redirects you to mbta.com", %{conn: conn} do
-      conn = post(conn, "/", %{"query" => %{"last_name" => "Ng"}})
-      assert redirected_to(conn) == "https://www.mbta.com"
+      log =
+        capture_log(fn ->
+          # This is defined in the `__using__` from `use DocumentViewerWeb.ConnCase`
+          conn = authenticated_no_valid_role(conn)
+          assert redirected_to(conn) == "https://www.mbta.com"
+
+          conn = post(conn, "/", %{"query" => %{"last_name" => "Ng"}})
+          assert redirected_to(conn) == "/auth/keycloak"
+        end)
+
+      assert log =~ "[warning] Document viewer role not found in the roles for user: admin"
     end
   end
 end
