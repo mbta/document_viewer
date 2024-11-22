@@ -42,7 +42,7 @@ defmodule DocumentViewer.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.7"},
-      {:phoenix_html, "~> 3.3"},
+      {:phoenix_html, "~> 4.1"},
       {:phoenix_view, "~> 2.0"},
       {:ecto, "~> 3.12"},
       {:phoenix_ecto, "~> 4.6"},
